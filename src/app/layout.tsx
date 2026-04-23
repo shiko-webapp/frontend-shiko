@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo } from "next/font/google";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AsideMenu } from "../components/asideMenu/AsideMenu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${archivo.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="h-screen flex bg-[#F8F9FB] font-sans overflow-hidden">
+        {/* AsideMenu får marginaler (p-4) för att inte nudda kanterna */}
+        <div className="p-4 flex h-full">
+          <AsideMenu />
+        </div>
+
+        {/* Huvudinnehållet får också padding och egen scroll */}
+        <main className="flex-1 overflow-y-auto p-4 pl-0">
+          <div className="h-full w-full">{children}</div>
+        </main>
+      </body>
     </html>
   );
 }

@@ -12,8 +12,8 @@ export const PopularCourses = () => {
     {
       id: 1,
       title: "Graphic Design",
-      sub: "Creating Visual Content",
-      author: "",
+      subTitle: "Creating Visual Content",
+      user: "",
       rating: "",
       lessons: 2,
       duration: "",
@@ -23,8 +23,8 @@ export const PopularCourses = () => {
     {
       id: 2,
       title: "UI/UX Design",
-      sub: "Complex User Interface",
-      author: "",
+      subTitle: "Complex User Interface",
+      user: "",
       rating: "",
       lessons: 2,
       duration: "",
@@ -34,8 +34,8 @@ export const PopularCourses = () => {
     {
       id: 3,
       title: "Brand Identity",
-      sub: "Collection of Visual",
-      author: "",
+      subTitle: "Collection of Visual",
+      user: "",
       rating: "",
       lessons: 2,
       duration: "",
@@ -45,8 +45,8 @@ export const PopularCourses = () => {
     {
       id: 4,
       title: "Web Design",
-      sub: "Creating Websites",
-      author: "",
+      subTitle: "Creating Websites",
+      user: "",
       rating: "",
       lessons: 2,
       duration: "",

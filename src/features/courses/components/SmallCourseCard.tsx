@@ -20,7 +20,7 @@ export const SmallCourseCard = ({ course }: ICourseCardProps) => {
             {course.title}
           </div>
           <div className="text-[11px] md:text-xs text-secondary-500 mt-1 truncate">
-            {course.sub}
+            {course.subTitle}
           </div>
         </div>
       </div>

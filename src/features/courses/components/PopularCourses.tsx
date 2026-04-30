@@ -6,51 +6,32 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ICourse } from "../models/ICourse";
 import { SmallCourseCard } from "./SmallCourseCard";
+import { IPopulaarCourse } from "../models/IPopularCourse";
 
 export const PopularCourses = () => {
-  const popularCategories: ICourse[] = [
+  const popularCategories: IPopulaarCourse[] = [
     {
       id: 1,
       title: "Graphic Design",
       subTitle: "Creating Visual Content",
-      user: "",
-      rating: "",
-      lessons: 2,
-      duration: "",
-      image: "",
       icon: faPalette,
     },
     {
       id: 2,
       title: "UI/UX Design",
       subTitle: "Complex User Interface",
-      user: "",
-      rating: "",
-      lessons: 2,
-      duration: "",
-      image: "",
       icon: faBezierCurve,
     },
     {
       id: 3,
       title: "Brand Identity",
       subTitle: "Collection of Visual",
-      user: "",
-      rating: "",
-      lessons: 2,
-      duration: "",
-      image: "",
       icon: faLayerGroup,
     },
     {
       id: 4,
       title: "Web Design",
       subTitle: "Creating Websites",
-      user: "",
-      rating: "",
-      lessons: 2,
-      duration: "",
-      image: "",
       icon: faGlobe,
     },
   ];

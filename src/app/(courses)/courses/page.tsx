@@ -1,75 +1,62 @@
 import { PopularCourses } from "@/src/features/courses/components/PopularCourses";
 import { ICourse } from "@/src/features/courses/models/ICourse";
 import { CourseCard } from "@/src/features/courses/components/CourseCard";
-import { faBezierCurve } from "@fortawesome/free-solid-svg-icons";
 
 export default function Courses() {
   const allCourses: ICourse[] = [
     {
       id: 1,
       title: "Artificial Intelligence",
-      subTitle: "",
       user: "Samantha William",
       rating: "5.0",
       lessons: 15,
       duration: "22h 30min",
       image: "https://unsplash.com",
-      icon: faBezierCurve,
     },
     {
       id: 2,
       title: "Data Science & Analytics",
-      subTitle: "",
       user: "Kevin Hope",
       rating: "4.7",
       lessons: 25,
       duration: "35h 20min",
       image: "https://unsplash.com",
-      icon: faBezierCurve,
     },
     {
       id: 3,
       title: "Digital Marketing",
-      subTitle: "",
       user: "Jannat Sally",
       rating: "5.0",
       lessons: 8,
       duration: "12h 10min",
       image: "https://unsplash.com",
-      icon: faBezierCurve,
     },
     {
       id: 4,
       title: "UI/UX Design for Beginner",
-      subTitle: "",
       user: "Johnny Ahmed",
       rating: "5.0",
       lessons: 18,
       duration: "27h 50min",
       image: "https://unsplash.com",
-      icon: faBezierCurve,
     },
     {
       id: 5,
       title: "Full stack Developer",
-      subTitle: "",
       user: "Hasan Mahmud",
       rating: "4.7",
       lessons: 32,
       duration: "45h 45min",
       image: "https://unsplash.com",
-      icon: faBezierCurve,
     },
     {
       id: 6,
       title: "Sketch for Designer",
-      subTitle: "",
       user: "Jannat Lila",
       rating: "4.9",
       lessons: 12,
       duration: "18h 25min",
       image: "https://unsplash.com",
-      icon: faBezierCurve,
     },
   ];
 

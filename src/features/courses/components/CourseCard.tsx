@@ -1,3 +1,4 @@
+"use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ICourse } from "../models/ICourse";
 import {
@@ -6,12 +7,14 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { CourseCardRating } from "./CourseCardRating";
+import { useRouter } from "next/navigation";
 
 interface ICourseCardProps {
   course: ICourse;
 }
 
 export const CourseCard = ({ course }: ICourseCardProps) => {
+  const router = useRouter();
   return (
     <section
       key={course.id}
@@ -43,7 +46,10 @@ export const CourseCard = ({ course }: ICourseCardProps) => {
             </div>
           </div>
 
-          <button className="btn btn-sm btn-primary rounded-xl! w-full xl:w-auto px-4 md:px-5 py-2 flex items-center justify-center gap-2 text-xs md:text-sm">
+          <button
+            onClick={() => router.push(`courses/${course.id}`)}
+            className="btn btn-sm btn-primary rounded-xl! w-full xl:w-auto px-4 md:px-5 py-2 flex items-center justify-center gap-2 text-xs md:text-sm"
+          >
             View Details
             <FontAwesomeIcon
               icon={faArrowUpRightFromSquare}

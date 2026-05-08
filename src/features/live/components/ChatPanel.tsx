@@ -1,6 +1,10 @@
 import { Link, Send } from "lucide-react";
 
-export default function ChatPanel() {
+interface ChatPanelProps {
+    liveClassId: number;
+}
+
+export default function ChatPanel({ liveClassId }: ChatPanelProps) {
     return (
         <div className="flex flex-col w-sm bg-gray-100 rounded-3xl h-screen">
             <div className="mt-4 p-4">

@@ -74,4 +74,18 @@ export class ChatHub {
     onReceiveMessage(callback: (message: ChatMessage) => void) : void {
         this.connection.on("ReceiveMessage", callback);
     }
+
+    onUserJoined(callback: (data: {
+        userId: string;
+        userName: string;
+        joinedAt: string;
+    }) => void) : void {
+        this.connection.on("UserJoined", callback);
+    }
+
+    onUserLeft(callback: (data: {
+        leavedAt: string;
+    }) => void) : void {
+        this.connection.on("UserLeft", callback);
+    }
 }

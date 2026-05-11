@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 
-import { postData } from "@/src/services/serviceBase/serviceBse";
+import { postData } from "@/src/services/serviceBase/serviceBase";
 import RegisterForm from "./components/RegisterForm";
 
 export default function RegisterPage() {

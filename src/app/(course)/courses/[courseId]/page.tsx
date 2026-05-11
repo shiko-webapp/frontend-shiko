@@ -1,6 +1,6 @@
 import { CourseInfo } from "@/src/features/courses/components/CourseInfo";
 import { CourseVideo } from "@/src/features/courses/components/CourseVideo";
-import { ICourse } from "@/src/features/courses/models/ICourse";
+import { getCourseById } from "@/src/features/courses/services/courseService";
 
 export default async function CourseDetailsPage({
   params,
@@ -8,65 +8,7 @@ export default async function CourseDetailsPage({
   params: { courseId: string };
 }) {
   const { courseId } = await params;
-
-  const allCourses: ICourse[] = [
-    {
-      id: 1,
-      title: "Artificial Intelligence",
-      user: "Samantha William",
-      rating: "5.0",
-      lessons: 15,
-      duration: "22h 30min",
-      image: "https://unsplash.com",
-    },
-    {
-      id: 2,
-      title: "Data Science & Analytics",
-      user: "Kevin Hope",
-      rating: "4.7",
-      lessons: 25,
-      duration: "35h 20min",
-      image: "https://unsplash.com",
-    },
-    {
-      id: 3,
-      title: "Digital Marketing",
-      user: "Jannat Sally",
-      rating: "5.0",
-      lessons: 8,
-      duration: "12h 10min",
-      image: "https://unsplash.com",
-    },
-    {
-      id: 4,
-      title: "UI/UX Design for Beginner",
-      user: "Johnny Ahmed",
-      rating: "5.0",
-      lessons: 18,
-      duration: "27h 50min",
-      image: "https://unsplash.com",
-    },
-    {
-      id: 5,
-      title: "Full stack Developer",
-      user: "Hasan Mahmud",
-      rating: "4.7",
-      lessons: 32,
-      duration: "45h 45min",
-      image: "https://unsplash.com",
-    },
-    {
-      id: 6,
-      title: "Sketch for Designer",
-      user: "Jannat Lila",
-      rating: "4.9",
-      lessons: 12,
-      duration: "18h 25min",
-      image: "https://unsplash.com",
-    },
-  ];
-
-  const course = allCourses.find((c) => c.id === Number(courseId));
+  const course = await getCourseById(courseId);
 
   if (!course) {
     return (
@@ -91,9 +33,9 @@ export default async function CourseDetailsPage({
               {course.title}
             </h1>
             <CourseInfo
-              lessons={course.lessons}
-              duration={course.duration}
-              raiting={course.rating}
+              lessons={course.numberOfLessons}
+              duration={course.durationInMinutes}
+              raiting={course.ratingScore}
             ></CourseInfo>
 
             <div className="flex gap-8 border-b border-gray-200 mb-8">

@@ -8,7 +8,7 @@ export const CourseVideo = ({ course }: ICourseVideoProps) => {
   return (
     <div className="relative aspect-video bg-gray-200 rounded-3xl overflow-hidden mb-8 shadow-sm">
       <img
-        src={course.image}
+        src={course.imageUrl}
         className="w-full h-full object-cover opacity-80"
         alt="Thumbnail"
       />

@@ -22,7 +22,7 @@ export const CourseCard = ({ course }: ICourseCardProps) => {
     >
       <div className="relative h-48 sm:h-52 md:h-60 w-full p-3 md:p-4">
         <img
-          src={course.image}
+          src={course.imageUrl}
           alt={course.title}
           className="w-full h-full object-cover rounded-3xl md:rounded-4xl"
         />
@@ -38,11 +38,11 @@ export const CourseCard = ({ course }: ICourseCardProps) => {
           <div className="flex gap-3 md:gap-4">
             <div className="flex items-center gap-1.5 text-[10px] md:text-xs text-secondary-500 font-bold whitespace-nowrap">
               <FontAwesomeIcon icon={faBookOpen} className="opacity-70" />
-              {course.lessons} Lessons
+              {course.numberOfLessons} Lessons
             </div>
             <div className="flex items-center gap-1.5 text-[10px] md:text-xs text-secondary-500 font-bold whitespace-nowrap">
               <FontAwesomeIcon icon={faClock} className="opacity-70" />
-              {course.duration}
+              {course.durationInMinutes}
             </div>
           </div>
 

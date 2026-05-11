@@ -1,11 +1,9 @@
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-
 export interface ICourse {
   id: number;
   title: string;
-  user: string;
-  rating: string;
-  lessons: number;
-  duration: string;
-  image: string;
+  userId: string;
+  ratingScore: string;
+  numberOfLessons: number;
+  durationInMinutes: string;
+  imageUrl: string;
 }

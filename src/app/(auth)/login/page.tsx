@@ -27,7 +27,9 @@ export default function LoginPage() {
       password,
     };
     try {
-      await loginRequest(payload);
+      const response = await loginRequest(payload);
+
+      console.log(response)
 
       window.location.href = "/";
     } catch (err) {

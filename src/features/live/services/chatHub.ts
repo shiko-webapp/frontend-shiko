@@ -12,7 +12,9 @@ export class ChatHub {
 
     constructor() {
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl(chatEndpoints.hub)
+            .withUrl(chatEndpoints.hub, {
+                withCredentials: true,  // skickar cookie automatiskt
+            })
             .withAutomaticReconnect()
             .build();
     }
@@ -33,27 +35,22 @@ export class ChatHub {
     }
 
     async joinLiveClass(
-        liveClassId: number,
-        userId: string,
-        userName: string): Promise<void> 
+        liveClassId: number): Promise<void> 
     {
         try {
             // Anropar ChatHub.JoinLiveClass() i backend
-            await this.connection.invoke("JoinLiveClass", liveClassId, userId, userName);
+            await this.connection.invoke("JoinLiveClass", liveClassId);
         } catch (error) {
             console.error("Error joining live class:", error);
         }   
     }
 
     async sendMessage(
-        liveClassId: number,
-        senderId: string, 
-        senderName: string,
-        content: string) : Promise<void>
+        liveClassId: number, content: string) : Promise<void>
     {
         try {
             // Anropar ChatHub.SendMessage() i backend
-            await this.connection.invoke("SendMessage", liveClassId, senderId, senderName, content);
+            await this.connection.invoke("SendMessage", liveClassId, content);
         } catch (error) {
             console.error("Error sending message:", error);
         }
@@ -66,8 +63,7 @@ export class ChatHub {
             await this.connection.invoke("LeaveLiveClass", liveClassId);
         } catch (error) {
             console.error("Error leaving live class:", error);
-        }
-        
+        }     
     }
 
     // Lyssnar på "ReceiveMessage" från ChatHub.cs i backend

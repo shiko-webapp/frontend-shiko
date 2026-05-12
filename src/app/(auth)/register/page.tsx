@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 
 import { postData } from "@/src/services/serviceBase/serviceBase";
@@ -17,7 +17,7 @@ export default function RegisterPage() {
       email: email,
       password: password,
     };
-    const url = `${process.env.NEXT_PUBLIC_AUTHSERVICE_URL}/register`;  
+    const url = `${process.env.NEXT_PUBLIC_AUTHSERVICE_URL}/auth/register`;  
     postData(url, payload);
   };
 

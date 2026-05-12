@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
@@ -80,6 +81,19 @@ export default function EmailForm({
           Continue
         </button>
 
+        {/* Footer links */}
+        <div className="mt-6 flex flex-col items-center gap-3">
+
+          <div className="text-sm text-gray-500">
+            Don’t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-[#E8472A] hover:underline"
+            >
+              Register
+            </Link>
+          </div>
+        </div>
         {/* <div className="flex items-center gap-3 my-7">
                         <span className="flex-1 h-px bg-gray-200" />
                         <span className="text-xs text-gray-400">or continue with</span>

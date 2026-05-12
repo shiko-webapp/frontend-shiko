@@ -12,11 +12,8 @@ interface ChatPanelProps {
 export default function ChatPanel({ liveClassId }: ChatPanelProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState("");
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const hubRef = useRef<ChatHub | null>(null);
-
-    // Generera ett unikt ID per session
-    const TEMP_USER_ID = useRef(`user-${Date.now()}`);
-    const TEMP_USER_NAME = useRef(`TestUser-${Date.now()}`);
 
     useEffect(() => {
         // Hämta historiska meddelanden via REST
@@ -30,11 +27,15 @@ export default function ChatPanel({ liveClassId }: ChatPanelProps) {
 
         const connect = async () => {
             await hub.start();
-            await hub.joinLiveClass(liveClassId, TEMP_USER_ID.current, TEMP_USER_NAME.current);
+            await hub.joinLiveClass(liveClassId);
 
             // Lyssna på nya meddelanden från hubben
             hub.onReceiveMessage((msg) => {
                 setMessages((prev) => [...prev, msg]);
+            });
+
+            hub.onUserJoined((data) => {
+                setCurrentUserId(data.userId); //Spara userId från JWT
             });
         }
 
@@ -51,8 +52,6 @@ export default function ChatPanel({ liveClassId }: ChatPanelProps) {
 
         await hubRef.current.sendMessage(
             liveClassId,
-            TEMP_USER_ID.current,
-            TEMP_USER_NAME.current,
             newMessage
         );
 
@@ -75,7 +74,8 @@ export default function ChatPanel({ liveClassId }: ChatPanelProps) {
 
             <div className="flex-1 overflow-y-auto">
                 {messages.map((msg) => {
-                    const isOwn = msg.senderId === TEMP_USER_ID.current;
+                    //Jämför med currentUserId från JWT
+                    const isOwn = currentUserId === msg.senderId;
                     return (
                         <div key={msg.id}
                             className={`flex flex-col p-4 ${isOwn ? "items-end" : "items-start"}`} >

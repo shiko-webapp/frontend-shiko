@@ -5,32 +5,36 @@ import React, { useState } from "react";
 import AuthLayout from "../../components/(auth)/AuthLayout";
 import EmailForm from "./components/EmailForm";
 import PasswordForm from "./components/PasswordForm";
-import { postData } from "@/src/services/serviceBase/serviceBase";
-import { useAuth } from "@/src/context/AuthContext";
+import { loginRequest } from "./fetch/loginRequest";
 
 type LoginResponse = {
-  accessToken: string,
-  expiresAt: string,
-}
+  accessToken: string;
+  expiresAt: string;
+};
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(process.env.NEXT_PUBLIC_TEST_USER || "");
+  const [password, setPassword] = useState(
+    process.env.NEXT_PUBLIC_TEST_PASSWORD || "",
+  );
   const [nextStep, setNextStep] = useState(false);
-  const { setAccessToken} = useAuth();
 
   const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     const payload = {
-      email: email,
-      password: password,
+      email,
+      password,
     };
-    const url = `${process.env.NEXT_PUBLIC_AUTHSERVICE_URL}/login`;
-    console.log(url);
-    const response: LoginResponse = await postData(url, payload);
-  
-    setAccessToken(response.accessToken);
-    
+    try {
+      const response = await loginRequest(payload);
+
+      console.log(response)
+
+      window.location.href = "/";
+    } catch (err) {
+      console.error("Login failed", err);
+    }
   };
 
   return (

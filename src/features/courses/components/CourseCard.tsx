@@ -22,7 +22,7 @@ export const CourseCard = ({ course }: ICourseCardProps) => {
     >
       <div className="relative h-48 sm:h-52 md:h-60 w-full p-3 md:p-4">
         <img
-          src={course.imageUrl}
+          src={course.imageUrl || "/docs"}
           alt={course.title}
           className="w-full h-full object-cover rounded-3xl md:rounded-4xl"
         />

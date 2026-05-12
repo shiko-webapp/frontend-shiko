@@ -4,14 +4,22 @@ import { ICourse } from "@/src/features/courses/models/ICourse";
 import { CourseCard } from "@/src/features/courses/components/CourseCard";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "@/src/features/courses/services/courseService";
+import { Spinner } from "@/src/features/courses/components/Spinner";
 
 export default function Courses() {
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getCoursesAsync = async () => {
-      const allCourses = await getAllCourses();
-      setCourses(allCourses);
+      setIsLoading(true);
+      try {
+        const allCourses = await getAllCourses();
+        setCourses(allCourses);
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     getCoursesAsync();
@@ -28,11 +36,15 @@ export default function Courses() {
               See All
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-8">
-            {courses.map((course) => (
-              <CourseCard course={course} key={course.id}></CourseCard>
-            ))}
-          </div>
+          {isLoading ? (
+            <Spinner message="Laddar kurser..."></Spinner>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-8 animate-in fade-in duration-500">
+              {courses.map((course) => (
+                <CourseCard course={course} key={course.id} />
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </article>

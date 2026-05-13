@@ -9,14 +9,21 @@ export interface ChatMessage {
     sentAt: string; 
 }
 
-// Kommunicerar med ChatApi i Azure via HTTP/REST.
 export const liveClassService = {
-    async getMessages(liveClassId: number) : Promise<ChatMessage[]>{
-        const response = await fetch(chatEndpoints.getMessages(liveClassId));
+    async getMessages(liveClassId: number): Promise<ChatMessage[]> {
 
-        if (!response.ok){
+        const response = await fetch(chatEndpoints.getMessages(liveClassId), {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                Accept: "application/json"
+            }
+        });
+
+        if (!response.ok) {
             throw new Error(`Failed to fetch messages: ${response.status}`);
         }
+
         return response.json();
     }
-}
+};

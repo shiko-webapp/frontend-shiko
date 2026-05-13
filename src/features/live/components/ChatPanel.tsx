@@ -7,16 +7,17 @@ import { ChatHub } from "../services/chatHub";
 
 interface ChatPanelProps {
     liveClassId: number;
+    userId: string;
+    userEmail: string;
 }
 
-export default function ChatPanel({ liveClassId }: ChatPanelProps) {
+export default function ChatPanel({ liveClassId, userId, userEmail }: ChatPanelProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState("");
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const hubRef = useRef<ChatHub | null>(null);
 
     useEffect(() => {
-        // Hämta historiska meddelanden via REST
         liveClassService.getMessages(liveClassId)
             .then(setMessages)
             .catch(error => console.error("Failed to load messages:", error));
@@ -74,8 +75,7 @@ export default function ChatPanel({ liveClassId }: ChatPanelProps) {
 
             <div className="flex-1 overflow-y-auto">
                 {messages.map((msg) => {
-                    //Jämför med currentUserId från JWT
-                    const isOwn = currentUserId === msg.senderId;
+                    const isOwn = userId === msg.senderId;
                     return (
                         <div key={msg.id}
                             className={`flex flex-col p-4 ${isOwn ? "items-end" : "items-start"}`} >

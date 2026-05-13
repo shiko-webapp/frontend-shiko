@@ -1,5 +1,6 @@
 import ChatPanel from "@/src/features/live/components/ChatPanel";
 import VideoPlayer from "@/src/features/live/components/VideoPlayer";
+import { requireUser } from "@/src/lib/auth";
 
 export default async function LiveClassChat({
     params
@@ -9,13 +10,18 @@ export default async function LiveClassChat({
     const { liveClassId } = await params;
     const id = Number(liveClassId);
 
+    const user = await requireUser();
+
     return (
         <main className="flex items-center justify-center flex-col w-full h-dvh">
             <div className="flex gap-6">
                 <VideoPlayer />
-                <ChatPanel liveClassId={id} />
+                <ChatPanel
+                    liveClassId={id}
+                    userId={user.id}
+                    userEmail={user.email}
+                />
             </div>
-
         </main>
     )
 }

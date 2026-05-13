@@ -5,7 +5,7 @@ import { ChatMessage } from "./liveClassService";
 
 /**
  * Hanterar realtidskommunikation med backend via SignalR.
- * Ansluter till ChatHub.cs i backend.
+ * Ansluter till ChatHub i backend.
  */
 export class ChatHub {
     private connection: signalR.HubConnection;
@@ -13,11 +13,12 @@ export class ChatHub {
     constructor() {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(chatEndpoints.hub, {
-                withCredentials: true,  // skickar cookie automatiskt
+                withCredentials: true
             })
             .withAutomaticReconnect()
             .build();
     }
+
 
     //Öppnar WebSocket anslutningen till backend
     async start(): Promise<void>{

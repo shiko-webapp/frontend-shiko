@@ -5,12 +5,9 @@ import React, { useState } from "react";
 import AuthLayout from "../../components/(auth)/AuthLayout";
 import EmailForm from "./components/EmailForm";
 import PasswordForm from "./components/PasswordForm";
-import { loginRequest } from "./fetch/loginRequest";
+import { apiFetch } from "@/src/lib/apiFetch";
 
-type LoginResponse = {
-  accessToken: string;
-  expiresAt: string;
-};
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState(process.env.NEXT_PUBLIC_TEST_USER || "");
@@ -27,7 +24,14 @@ export default function LoginPage() {
       password,
     };
     try {
-      const response = await loginRequest(payload);
+      const response = await apiFetch("/api/auth/login",{
+      method: "POST",
+      credentials: "include", // 👈 IMPORTANT
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    } );
 
       console.log(response)
 

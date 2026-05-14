@@ -1,7 +1,7 @@
 interface ICourseInfoProps {
   lessons: number;
-  duration: string;
-  raiting: string;
+  duration: number;
+  raiting: number;
 }
 export const CourseInfo = ({
   lessons,

@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { IFaq } from "../../faq/models/IFaq";
+import { FaqCard } from "../../faq/components/FaqCard";
 
 interface CourseTabsProps {
   description: string | null;
   keyPoints: string[];
+  faqs: IFaq[];
 }
 
-export function CourseTabs({ description, keyPoints }: CourseTabsProps) {
+export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
   const [activeTab, setActiveTab] = useState<"overview" | "faqs">("overview");
 
   return (
-    <div className="mt-8">
+    <section className="mt-8">
       <div className="flex gap-2 mb-8">
         <button
           onClick={() => setActiveTab("overview")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
             activeTab === "overview"
               ? "bg-[#1E293B] text-white"
               : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
@@ -25,7 +28,7 @@ export function CourseTabs({ description, keyPoints }: CourseTabsProps) {
         </button>
         <button
           onClick={() => setActiveTab("faqs")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
             activeTab === "faqs"
               ? "bg-[#1E293B] text-white"
               : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
@@ -67,11 +70,8 @@ export function CourseTabs({ description, keyPoints }: CourseTabsProps) {
             )}
           </div>
         )}
-
-        {activeTab === "faqs" && (
-          <div className="text-sm text-[#64748B]">No FAQ available..</div>
-        )}
+        {activeTab === "faqs" && <FaqCard faqs={faqs}></FaqCard>}
       </div>
-    </div>
+    </section>
   );
 }

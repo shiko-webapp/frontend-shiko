@@ -2,6 +2,7 @@ import { CourseInfo } from "@/src/features/courses/components/CourseInfo";
 import { CourseTabs } from "@/src/features/courses/components/CourseTabs";
 import { CourseVideo } from "@/src/features/courses/components/CourseVideo";
 import { getCourseById } from "@/src/features/courses/services/courseService";
+import { getAllFaqs } from "@/src/features/faq/services/faqService";
 
 export default async function CourseDetailsPage({
   params,
@@ -10,6 +11,7 @@ export default async function CourseDetailsPage({
 }) {
   const { courseId } = await params;
   const course = await getCourseById(courseId);
+  const faqs = await getAllFaqs(courseId);
 
   if (!course) {
     return (
@@ -42,6 +44,7 @@ export default async function CourseDetailsPage({
             <CourseTabs
               description={course.description}
               keyPoints={course.keyPoints}
+              faqs={faqs}
             />
           </section>
         </div>

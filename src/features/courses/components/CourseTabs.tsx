@@ -80,7 +80,7 @@ export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
             {!faqs || faqs.length === 0 ? (
               <p className="text-sm text-[#64748B]">No FAQ available.</p>
             ) : (
-              faqs.map((faq) => {
+              faqs.map((faq, index) => {
                 const isOpen = openFaqId === faq.id;
 
                 return (
@@ -92,7 +92,9 @@ export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
                       onClick={() => toggleFaq(faq.id)}
                       className="flex items-center justify-between w-full text-left font-semibold text-[#0F172A] text-base md:text-lg focus:outline-none"
                     >
-                      <span>{faq.question}</span>
+                      <span>
+                        {index + 1}. {faq.question}
+                      </span>
 
                       <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#F1F5F9] text-[#94A3B8] text-xl font-light select-none transition-transform duration-200 cursor-pointer">
                         {isOpen ? "−" : "+"}

@@ -1,11 +1,11 @@
 export interface ICourse {
-  id: string; // Ändrad från number till string (eftersom C# använder Guid)
+  id: string;
   title: string;
   imageUrl: string;
-  ratingScore: number; // Ändrad från string till number (eftersom C# använder double)
+  ratingScore: number;
   numberOfLessons: number;
-  durationInMinutes: number; // Ändrad från string till number (eftersom C# använder int)
-  description: string | null; // Tillagd (nullable sträng från din C#-uppdatering)
-  keyPoints: string[]; // Tillagd (din nya lista med strängar)
+  durationInMinutes: number;
+  description: string | null;
+  keyPoints: string[];
   userId: string;
 }

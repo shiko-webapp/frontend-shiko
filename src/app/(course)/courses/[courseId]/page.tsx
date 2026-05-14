@@ -1,4 +1,5 @@
 import { CourseInfo } from "@/src/features/courses/components/CourseInfo";
+import { CourseTabs } from "@/src/features/courses/components/CourseTabs";
 import { CourseVideo } from "@/src/features/courses/components/CourseVideo";
 import { getCourseById } from "@/src/features/courses/services/courseService";
 
@@ -38,18 +39,10 @@ export default async function CourseDetailsPage({
               raiting={course.ratingScore}
             ></CourseInfo>
 
-            <div className="flex gap-8 border-b border-gray-200 mb-8">
-              <button
-                className={`pb-4 text-sm font-medium ${"text-[#1D2939] border-b-2 border-[#1D2939]"}`}
-              >
-                Ovweview
-              </button>
-              <button
-                className={`pb-4 text-sm font-medium ${"text-[#1D2939] border-b-2 border-[#1D2939]"}`}
-              >
-                FAQ
-              </button>
-            </div>
+            <CourseTabs
+              description={course.description}
+              keyPoints={course.keyPoints}
+            />
           </section>
         </div>
       </div>

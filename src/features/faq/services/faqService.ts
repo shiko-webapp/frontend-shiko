@@ -1,4 +1,4 @@
-import { getData } from "@/src/services/serviceBase/serviceBse";
+import { getData } from "@/src/services/serviceBase/serviceBase";
 import { IFaq } from "../models/IFaq";
 
 export const getAllFaqs = async (courseId: string): Promise<IFaq[]> => {

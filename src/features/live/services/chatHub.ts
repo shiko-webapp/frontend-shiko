@@ -10,15 +10,28 @@ import { ChatMessage } from "./liveClassService";
 export class ChatHub {
     private connection: signalR.HubConnection;
 
-    constructor() {
-        this.connection = new signalR.HubConnectionBuilder()
-            .withUrl(chatEndpoints.hub, {
-                withCredentials: true
-            })
-            .withAutomaticReconnect()
-            .build();
-    }
+    // constructor() {
+    //     this.connection = new signalR.HubConnectionBuilder()
+    //         .withUrl(chatEndpoints.hub, {
+    //             withCredentials: true
+    //         })
+    //         .withAutomaticReconnect()
+    //         .build();
+    // }
 
+    constructor() {
+    this.connection = new signalR.HubConnectionBuilder()
+        .withUrl(chatEndpoints.hub, {
+            accessTokenFactory: async () => {
+                const res = await fetch("/api/chat/token");
+                if (!res.ok) return "";
+                const data = await res.json();
+                return data.accessToken;
+            }
+        })
+        .withAutomaticReconnect()
+        .build();
+}
 
     //Öppnar WebSocket anslutningen till backend
     async start(): Promise<void>{

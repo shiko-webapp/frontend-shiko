@@ -9,16 +9,36 @@ export interface ChatMessage {
     sentAt: string; 
 }
 
+// export const liveClassService = {
+//     async getMessages(liveClassId: number): Promise<ChatMessage[]> {
+
+//         const response = await fetch(chatEndpoints.getMessages(liveClassId), {
+//             method: "GET",
+//             credentials: "include",
+//             headers: {
+//                 Accept: "application/json"
+//             }
+//         });
+
+//         if (!response.ok) {
+//             throw new Error(`Failed to fetch messages: ${response.status}`);
+//         }
+
+//         return response.json();
+//     }
+// };
+
 export const liveClassService = {
     async getMessages(liveClassId: number): Promise<ChatMessage[]> {
-
-        const response = await fetch(chatEndpoints.getMessages(liveClassId), {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Accept: "application/json"
+        const response = await fetch(
+            `/api/chat/messages?liveClassId=${liveClassId}`,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json"
+                }
             }
-        });
+        );
 
         if (!response.ok) {
             throw new Error(`Failed to fetch messages: ${response.status}`);

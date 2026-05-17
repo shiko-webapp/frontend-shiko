@@ -6,6 +6,8 @@ export const getAllCourses = async (): Promise<ICourse[]> => {
     const url = process.env.NEXT_PUBLIC_COURSE_API_URL;
     const courses = await getData<ICourse[]>(url || "");
 
+    console.log("data", courses);
+
     return courses;
   } catch (error) {
     console.log(error);

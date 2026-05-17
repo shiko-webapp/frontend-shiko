@@ -1,9 +1,11 @@
 export interface ICourse {
-  id: number;
+  id: string;
   title: string;
-  userId: string;
-  ratingScore: string;
-  numberOfLessons: number;
-  durationInMinutes: string;
   imageUrl: string;
+  ratingScore: number;
+  numberOfLessons: number;
+  durationInMinutes: number;
+  description: string | null;
+  keyPoints: string[];
+  userId: string;
 }

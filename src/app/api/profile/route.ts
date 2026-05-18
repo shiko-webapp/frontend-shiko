@@ -14,5 +14,28 @@ export async function GET(req: Request) {
       "content-type":
         backendRes.headers.get("content-type") || "application/json",
     },
+  }); 
+}
+
+export async function PUT(req: Request) {
+  const body = await req.json();
+  const backendRes = await fetch(
+    `${process.env.PROFILE_API_URL}/api/profile`,
+    {
+      method: "PUT",
+      headers: {
+        cookie: req.headers.get("cookie") || "",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    }
+  );
+  return new Response(backendRes.body, {
+    status: backendRes.status,
+    headers: {
+      "content-type":
+        backendRes.headers.get("content-type") || "application/json",
+    },
   });
 }

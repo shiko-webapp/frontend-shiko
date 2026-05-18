@@ -41,10 +41,10 @@ export default function ProfilePage() {
 
 return (
   <main className="p-8">
-    <h4 className="text-2xl font-bold mb-6">Profile</h4>
-    {profile && (
-      <div className="flex gap-6">
-        {/* Profile Card */}
+    <h4 className="mb-6">Profile</h4>
+    <div className="flex gap-6">
+      {/* Profile Card */}
+      {profile && (
         <div className="w-80 shrink-0">
           <ProfileCard
             profile={profile}
@@ -52,15 +52,15 @@ return (
             achievements={achievements}
           />
         </div>
-        {/* Profile Form */}
-        <div className="flex-1">
-          <ProfileForm
-            profile={profile}
-            onSave={(updatedProfile) => setProfile(updatedProfile)}
-          />
-        </div>
+      )}
+      {/* Profile Form */}
+      <div className="flex-1">
+        <ProfileForm
+          profile={profile ?? { id: 0, userId: "", firstName: "", lastName: "", phoneNumber: "", description: "", profileImageUrl: "" }}
+          onSave={(updatedProfile) => setProfile(updatedProfile)}
+        />
       </div>
-    )}
+    </div>
   </main>
 );
 }

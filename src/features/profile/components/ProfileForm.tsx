@@ -1,0 +1,103 @@
+"use client";
+import { useState } from "react";
+import { IProfile } from "../models/IProfile";
+import { updateProfile } from "../services/profileService";
+
+interface IProfileFormProps {
+  profile: IProfile;
+  onSave: (updatedProfile: IProfile) => void;
+}
+
+export const ProfileForm = ({ profile, onSave }: IProfileFormProps) => {
+  const [firstName, setFirstName] = useState(profile.firstName ?? "");
+  const [lastName, setLastName] = useState(profile.lastName ?? "");
+  const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber ?? "");
+  const [description, setDescription] = useState(profile.description ?? "");
+
+const handleSubmit = async () => {
+  try {
+    const updatedProfile = await updateProfile({
+      ...profile,
+      firstName,
+      lastName,
+      phoneNumber,
+      description,
+    });
+    onSave(updatedProfile);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  return (
+    <section className="bg-white rounded-2xl shadow-sm border border-secondary-50 p-6">
+
+      {/* First name */}
+      <div className="mb-4">
+        <label className="block text-small font-semibold text-secondary-900 mb-1">First name *</label>
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500"
+        />
+      </div>
+
+      {/* Last name */}
+      <div className="mb-4">
+        <label className="block text-small font-semibold text-secondary-900 mb-1">Last name *</label>
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500"
+        />
+      </div>
+
+      {/* Phone number */}
+      <div className="mb-4">
+        <label className="block text-small font-semibold text-secondary-900 mb-1">Phone number</label>
+        <input
+          type="text"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          placeholder="Enter phone number"
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500"
+        />
+      </div>
+
+      {/* Description */}
+      <div className="mb-6">
+        <label className="block text-small font-semibold text-secondary-900 mb-1">Description</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={5}
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+        />
+      </div>
+
+      {/* Buttons */}
+      <div className="flex gap-3">
+        <button
+          onClick={() => {
+            setFirstName(profile.firstName ?? "");
+            setLastName(profile.lastName ?? "");
+            setPhoneNumber(profile.phoneNumber ?? "");
+            setDescription(profile.description ?? "");
+          }}
+          className="btn btn-md btn-secondary"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="btn btn-md btn-primary"
+        >
+          Save
+        </button>
+      </div>
+
+    </section>
+  );
+};

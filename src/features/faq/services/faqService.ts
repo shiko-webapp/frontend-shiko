@@ -1,3 +1,4 @@
+
 import { getData, postData } from "@/src/services/serviceBase/serviceBase";
 import { IFaq } from "../models/IFaq";
 import { IFaqDto } from "../../admin-courses/Dtos/IFaqDto";

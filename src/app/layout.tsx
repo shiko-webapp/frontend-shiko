@@ -3,6 +3,7 @@ import { Archivo } from "next/font/google";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AsideMenu } from "../components/asideMenu/AsideMenu";
+import { AuthProvider } from "../context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} h-full antialiased`}>
       <body className="h-screen flex overflow-hidden">
-        <div className="p-4 flex h-full">
+        {/* <div className="p-4 flex h-full">
           <AsideMenu />
-        </div>
+        </div> */}
         <main className="flex-1 overflow-y-auto p-4 pl-0">
-          <div className="h-full w-full">{children}</div>
+          <div className="h-full w-full">
+            <AuthProvider>{children}</AuthProvider>
+          </div>
         </main>
       </body>
     </html>

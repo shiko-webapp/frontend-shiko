@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { IFaq } from "../../faq/models/IFaq";
 import { FaqCard } from "../../faq/components/FaqCard";
+import { InstructorCard } from "../../instructor-chat/InstructorCard";
 
 interface CourseTabsProps {
   description: string | null;
@@ -10,8 +11,10 @@ interface CourseTabsProps {
   faqs: IFaq[];
 }
 
+type TabType = "overview" | "faqs" | "instructor";
+
 export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
-  const [activeTab, setActiveTab] = useState<"overview" | "faqs">("overview");
+  const [activeTab, setActiveTab] = useState<TabType>("overview");
 
   return (
     <section className="mt-8">
@@ -35,6 +38,16 @@ export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
           }`}
         >
           FAQs
+        </button>
+        <button
+          onClick={() => setActiveTab("instructor")}
+          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
+            activeTab === "instructor"
+              ? "bg-[#1E293B] text-white"
+              : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
+          }`}
+        >
+          Instructor
         </button>
       </div>
 
@@ -71,6 +84,7 @@ export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
           </div>
         )}
         {activeTab === "faqs" && <FaqCard faqs={faqs}></FaqCard>}
+        {activeTab === "instructor" && <InstructorCard />}
       </div>
     </section>
   );

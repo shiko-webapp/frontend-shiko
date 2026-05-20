@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { IFaq } from "../../faq/models/IFaq";
 import { FaqCard } from "../../faq/components/FaqCard";
-import { InstructorCard } from "../../instructor-chat/InstructorCard";
+import { InstructorCard } from "../../instructor-chat/components/InstructorCard";
 
 interface CourseTabsProps {
   description: string | null;
@@ -13,46 +13,35 @@ interface CourseTabsProps {
 
 type TabType = "overview" | "faqs" | "instructor";
 
+const menuCategories = [
+  { title: "Overview" },
+  { title: "FAQs" },
+  { title: "Instructor" },
+];
+
 export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("overview");
+  const [activeTab, setActiveTab] = useState<string>("Overview");
 
   return (
     <section className="mt-8">
       <div className="flex gap-2 mb-8">
-        <button
-          onClick={() => setActiveTab("overview")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
-            activeTab === "overview"
-              ? "bg-[#1E293B] text-white"
-              : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
-          }`}
-        >
-          Overview
-        </button>
-        <button
-          onClick={() => setActiveTab("faqs")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
-            activeTab === "faqs"
-              ? "bg-[#1E293B] text-white"
-              : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
-          }`}
-        >
-          FAQs
-        </button>
-        <button
-          onClick={() => setActiveTab("instructor")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
-            activeTab === "instructor"
-              ? "bg-[#1E293B] text-white"
-              : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
-          }`}
-        >
-          Instructor
-        </button>
+        {menuCategories.map((c) => (
+          <button
+            key={c.title}
+            onClick={() => setActiveTab(c.title)}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
+              activeTab === c.title
+                ? "bg-[#1E293B] text-white"
+                : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
+            }`}
+          >
+            {c.title}
+          </button>
+        ))}
       </div>
 
       <div className="mt-6">
-        {activeTab === "overview" && (
+        {activeTab === "Overview" && (
           <div className="space-y-8">
             <div>
               <h2 className="text-xl font-bold text-[#0F172A] mb-3">About</h2>
@@ -83,8 +72,8 @@ export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
             )}
           </div>
         )}
-        {activeTab === "faqs" && <FaqCard faqs={faqs}></FaqCard>}
-        {activeTab === "instructor" && <InstructorCard />}
+        {activeTab === "FAQs" && <FaqCard faqs={faqs}></FaqCard>}
+        {activeTab === "Instructor" && <InstructorCard />}
       </div>
     </section>
   );

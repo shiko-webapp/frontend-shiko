@@ -3,6 +3,7 @@ import { CourseTabs } from "@/src/features/courses/components/CourseTabs";
 import { CourseVideo } from "@/src/features/courses/components/CourseVideo";
 import { getCourseById } from "@/src/features/courses/services/courseService";
 import { getAllFaqs } from "@/src/features/faq/services/faqService";
+import { requireUser } from "@/src/lib/auth";
 
 export default async function CourseDetailsPage({
   params,
@@ -12,6 +13,10 @@ export default async function CourseDetailsPage({
   const { courseId } = await params;
   const course = await getCourseById(courseId);
   const faqs = await getAllFaqs(courseId);
+
+  const user = await requireUser();
+
+  console.log("User: ", user);
 
   if (!course) {
     return (

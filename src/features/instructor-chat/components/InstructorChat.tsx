@@ -20,7 +20,6 @@ export const InstructorChat = ({
 }: InstructorChatProps) => {
   const [typedMessage, setTypedMessage] = useState("");
 
-  // Några förberedda mockade meddelanden för att visa designen
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -42,7 +41,6 @@ export const InstructorChat = ({
     },
   ]);
 
-  // Funktion för att hantera när man klickar på "Send" eller trycker Enter
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!typedMessage.trim()) return;
@@ -58,15 +56,13 @@ export const InstructorChat = ({
     };
 
     setMessages([...messages, newMessage]);
-    setTypedMessage(""); // Rensa fältet efteråt
+    setTypedMessage("");
   };
 
   return (
-    <div className="w-full bg-background border border-secondary-50 rounded-2xl shadow-sm overflow-hidden flex flex-col font-sans">
-      {/* Chatt-header */}
+    <section className="w-full bg-background border border-secondary-50 rounded-2xl shadow-sm overflow-hidden flex flex-col font-sans">
       <div className="bg-secondary-50 px-5 py-4 border-b border-secondary-50 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {/* Liten rund indikator för online-status */}
           <div className="w-2.5 h-2.5 rounded-full bg-quaternary-500 animate-pulse"></div>
           <div>
             <h5 className="text-base font-bold text-secondary-900 leading-tight">
@@ -78,7 +74,6 @@ export const InstructorChat = ({
           </div>
         </div>
 
-        {/* Tillbaka-knapp */}
         <button
           onClick={onBack}
           className="text-xs font-semibold text-secondary-500 hover:text-secondary-900 cursor-pointer transition-colors"
@@ -86,9 +81,7 @@ export const InstructorChat = ({
           ← Back to profile
         </button>
       </div>
-
-      {/* Meddelandehistorik (Scrollbart fönster) */}
-      <div className="p-5 h-[350px] overflow-y-auto space-y-4 bg-[#FAFAFA]">
+      <div className="p-5 h-87.5 overflow-y-auto space-y-4 bg-[#FAFAFA]">
         {messages.map((msg) => {
           const isStudent = msg.sender === "student";
 
@@ -99,17 +92,16 @@ export const InstructorChat = ({
                 isStudent ? "items-end" : "items-start"
               }`}
             >
-              {/* Meddelandebubbla */}
               <div
                 className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-[14px] leading-relaxed shadow-xs ${
                   isStudent
-                    ? "bg-primary-500 text-white rounded-tr-none" // Studentens bubbla (Orange)
-                    : "bg-white border border-gray-100 text-secondary-900 rounded-tl-none" // Lärarens bubbla (Vit)
+                    ? "bg-primary-500 text-white rounded-tr-none"
+                    : "bg-white border border-gray-100 text-secondary-900 rounded-tl-none"
                 }`}
               >
                 <p className="font-normal">{msg.text}</p>
               </div>
-              {/* Tidsstämpel under bubblan */}
+
               <span className="text-[10px] text-secondary-500 mt-1 px-1 font-medium">
                 {msg.timestamp}
               </span>
@@ -132,11 +124,11 @@ export const InstructorChat = ({
         />
         <button
           type="submit"
-          className="btn btn-sm btn-secondary !rounded-full px-5 h-[38px]"
+          className="btn btn-sm btn-secondary rounded-full! px-5 h-9.5"
         >
           Send
         </button>
       </form>
-    </div>
+    </section>
   );
 };

@@ -1,27 +1,18 @@
-import ChatPanel from "@/src/features/live/components/ChatPanel";
-import VideoPlayer from "@/src/features/live/components/VideoPlayer";
 import { requireUser } from "@/src/lib/auth";
+import LiveClassChat from "./LiveClassChat";
 
-export default async function LiveClassChat({
-    params
-}: {
-    params: Promise<{ liveClassId: string }>
-}) {
-    const { liveClassId } = await params;
-    const id = Number(liveClassId);
+interface PageProps {
+    params: Promise<{ liveClassId: string }>;
+}
 
+export default async function Page({ params }: PageProps) {
     const user = await requireUser();
+    const { liveClassId } = await params;
 
     return (
-        <main className="flex items-center justify-center flex-col w-full h-dvh">
-            <div className="flex gap-6">
-                <VideoPlayer />
-                <ChatPanel
-                    liveClassId={id}
-                    userId={user.id}
-                    userEmail={user.email}
-                />
-            </div>
-        </main>
-    )
+        <LiveClassChat
+            liveClassId={parseInt(liveClassId)}
+            userId={user.id}
+        />
+    );
 }

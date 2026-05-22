@@ -1,8 +1,15 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-export interface IPopulaarCourse {
-  id: number;
+export interface IPopularCourse {
+  courseId: string;
   title: string;
-  subTitle: string;
-  icon: IconDefinition;
+  description: string;
+  imageUrl: string;
+  viewCount: number;
+}
+
+export interface IPopularCoursesResponse {
+  data: IPopularCourse[];
+  weekStart: string;
+  generatedAt: string;
 }

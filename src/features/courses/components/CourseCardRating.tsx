@@ -11,18 +11,20 @@ export const CourseCardRating = ({ course }: ICourseCardProps) => {
       <div className="w-7 h-7 md:w-8 md:h-8 rounded-full border-2 border-white shadow-sm overflow-hidden shrink-0">
         <img
           src={`https://ui-avatars.com{course.author}&background=f9ccc8&color=b13f25`}
-          alt={course.user}
+          alt={course.userId}
         />
       </div>
       <span className="text-xs md:text-sm text-secondary-500 truncate">
-        {course.user}
+        {course.userId}
       </span>
       <div className="flex items-center gap-1 shrink-0">
         <FontAwesomeIcon
           icon={faStar}
           className="text-primary-300 text-[10px] md:text-xs"
         />
-        <span className="text-xs md:text-sm font-bold">{course.rating}</span>
+        <span className="text-xs md:text-sm font-bold">
+          {course.ratingScore}
+        </span>
       </div>
     </div>
   );

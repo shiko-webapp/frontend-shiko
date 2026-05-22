@@ -1,77 +1,29 @@
+"use client";
 import { PopularCourses } from "@/src/features/courses/components/PopularCourses";
 import { ICourse } from "@/src/features/courses/models/ICourse";
 import { CourseCard } from "@/src/features/courses/components/CourseCard";
-import { faBezierCurve } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import { getAllCourses } from "@/src/features/courses/services/courseService";
+import { Spinner } from "@/src/features/courses/components/Spinner";
 
 export default function Courses() {
-  const allCourses: ICourse[] = [
-    {
-      id: 1,
-      title: "Artificial Intelligence",
-      subTitle: "",
-      user: "Samantha William",
-      rating: "5.0",
-      lessons: 15,
-      duration: "22h 30min",
-      image: "https://unsplash.com",
-      icon: faBezierCurve,
-    },
-    {
-      id: 2,
-      title: "Data Science & Analytics",
-      subTitle: "",
-      user: "Kevin Hope",
-      rating: "4.7",
-      lessons: 25,
-      duration: "35h 20min",
-      image: "https://unsplash.com",
-      icon: faBezierCurve,
-    },
-    {
-      id: 3,
-      title: "Digital Marketing",
-      subTitle: "",
-      user: "Jannat Sally",
-      rating: "5.0",
-      lessons: 8,
-      duration: "12h 10min",
-      image: "https://unsplash.com",
-      icon: faBezierCurve,
-    },
-    {
-      id: 4,
-      title: "UI/UX Design for Beginner",
-      subTitle: "",
-      user: "Johnny Ahmed",
-      rating: "5.0",
-      lessons: 18,
-      duration: "27h 50min",
-      image: "https://unsplash.com",
-      icon: faBezierCurve,
-    },
-    {
-      id: 5,
-      title: "Full stack Developer",
-      subTitle: "",
-      user: "Hasan Mahmud",
-      rating: "4.7",
-      lessons: 32,
-      duration: "45h 45min",
-      image: "https://unsplash.com",
-      icon: faBezierCurve,
-    },
-    {
-      id: 6,
-      title: "Sketch for Designer",
-      subTitle: "",
-      user: "Jannat Lila",
-      rating: "4.9",
-      lessons: 12,
-      duration: "18h 25min",
-      image: "https://unsplash.com",
-      icon: faBezierCurve,
-    },
-  ];
+  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getCoursesAsync = async () => {
+      setIsLoading(true);
+      try {
+        const allCourses = await getAllCourses();
+        setCourses(allCourses);
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getCoursesAsync();
+  }, []);
 
   return (
     <article className="min-h-screen bg-background font-sans p-4 sm:p-8 md:p-12">
@@ -84,11 +36,15 @@ export default function Courses() {
               See All
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-8">
-            {allCourses.map((course) => (
-              <CourseCard course={course} key={course.id}></CourseCard>
-            ))}
-          </div>
+          {isLoading ? (
+            <Spinner message="Laddar kurser..."></Spinner>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-8 animate-in fade-in duration-500">
+              {courses.map((course) => (
+                <CourseCard course={course} key={course.id} />
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </article>

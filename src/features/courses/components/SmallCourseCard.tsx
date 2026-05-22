@@ -1,9 +1,10 @@
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ICourse } from "../models/ICourse";
+import { IPopulaarCourse } from "../models/IPopularCourse";
 
 interface ICourseCardProps {
-  course: ICourse;
+  course: IPopulaarCourse;
 }
 export const SmallCourseCard = ({ course }: ICourseCardProps) => {
   return (

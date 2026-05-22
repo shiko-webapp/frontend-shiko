@@ -1,3 +1,4 @@
+"use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ICourse } from "../models/ICourse";
 import {
@@ -6,12 +7,14 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { CourseCardRating } from "./CourseCardRating";
+import { useRouter } from "next/navigation";
 
 interface ICourseCardProps {
   course: ICourse;
 }
 
 export const CourseCard = ({ course }: ICourseCardProps) => {
+  const router = useRouter();
   return (
     <section
       key={course.id}
@@ -19,7 +22,7 @@ export const CourseCard = ({ course }: ICourseCardProps) => {
     >
       <div className="relative h-48 sm:h-52 md:h-60 w-full p-3 md:p-4">
         <img
-          src={course.image}
+          src={course.imageUrl || "/docs"}
           alt={course.title}
           className="w-full h-full object-cover rounded-3xl md:rounded-4xl"
         />
@@ -35,15 +38,18 @@ export const CourseCard = ({ course }: ICourseCardProps) => {
           <div className="flex gap-3 md:gap-4">
             <div className="flex items-center gap-1.5 text-[10px] md:text-xs text-secondary-500 font-bold whitespace-nowrap">
               <FontAwesomeIcon icon={faBookOpen} className="opacity-70" />
-              {course.lessons} Lessons
+              {course.numberOfLessons} Lessons
             </div>
             <div className="flex items-center gap-1.5 text-[10px] md:text-xs text-secondary-500 font-bold whitespace-nowrap">
               <FontAwesomeIcon icon={faClock} className="opacity-70" />
-              {course.duration}
+              {course.durationInMinutes}
             </div>
           </div>
 
-          <button className="btn btn-sm btn-primary rounded-xl! w-full xl:w-auto px-4 md:px-5 py-2 flex items-center justify-center gap-2 text-xs md:text-sm">
+          <button
+            onClick={() => router.push(`courses/${course.id}`)}
+            className="btn btn-sm btn-primary rounded-xl! w-full xl:w-auto px-4 md:px-5 py-2 flex items-center justify-center gap-2 text-xs md:text-sm"
+          >
             View Details
             <FontAwesomeIcon
               icon={faArrowUpRightFromSquare}

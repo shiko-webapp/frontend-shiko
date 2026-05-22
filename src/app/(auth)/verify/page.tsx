@@ -1,9 +1,11 @@
 import VerificationForm from "../../components/(auth)/VerificationForm"
 
-export const VerifyPage = () => {
+const VerifyPage = () => {
     return (
         <main>
             <VerificationForm />
         </main>
     )
 }
+
+export default VerifyPage

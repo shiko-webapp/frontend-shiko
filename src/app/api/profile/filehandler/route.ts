@@ -1,0 +1,21 @@
+export async function POST(req: Request) {
+    const formData = await req.formData();
+
+    const backendRes = await fetch(`${process.env.FILEHANDLER_API_URL}/api/files/upload`,
+        {
+            method: "POST",
+            headers: {
+                cookie: req.headers.get("cookie") || "",
+            },
+            body: formData, 
+        }
+    );
+
+    return new Response(backendRes.body, {
+        status: backendRes.status,
+        headers: {
+            "content-type":
+                backendRes.headers.get("content-type") || "application/json",
+        },
+    });
+}

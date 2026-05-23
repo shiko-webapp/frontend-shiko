@@ -1,6 +1,6 @@
 export async function GET(req: Request) {
   const backendRes = await fetch(
-    `${process.env.SKILLS_API_URL}/api/userskills`,
+    `${process.env.SKILLS_API_URL}/api/skills`,
     {
       headers: {
         cookie: req.headers.get("cookie") || "",

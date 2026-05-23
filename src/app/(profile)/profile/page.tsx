@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { IProfile } from "@/src/features/profile/models/IProfile";
 import { IUserSkill } from "@/src/features/profile/models/IUserSkill";
 import { IUserAchievement } from "@/src/features/profile/models/IUserAchievement";
-import { getProfile, updateProfile } from "@/src/features/profile/services/profileService";
-import { getUserSkills } from "@/src/features/profile/services/skillsService";
+import { getProfile } from "@/src/features/profile/services/profileService";
+import { getUserSkills } from "@/src/features/profile/services/userSkillsService";
 import { getUserAchievements } from "@/src/features/profile/services/achievementsService";
 import { ProfileCard } from "@/src/features/profile/components/ProfileCard";
 import { ProfileForm } from "@/src/features/profile/components/ProfileForm";
@@ -56,6 +56,7 @@ return (
           achievements={achievements}
           role={currentUser?.role ?? "Student"}
           onProfileUpdate={(updatedProfile) => setProfile(updatedProfile)}
+          onSkillsUpdate={(updatedSkills) => setSkills(updatedSkills)}
         />
         </div>
       )}

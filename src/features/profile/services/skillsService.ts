@@ -1,7 +1,7 @@
 import { apiFetch } from "@/src/lib/apiFetch";
-import { IUserSkill } from "../models/IUserSkill";
+import { ISkill } from "../models/ISkill";
 
-export const getUserSkills = async (): Promise<IUserSkill[]> => {
+export const getSkills = async (): Promise<ISkill[]> => {
   const res = await apiFetch(`/api/profile/skills`);
   return res.json();
 };

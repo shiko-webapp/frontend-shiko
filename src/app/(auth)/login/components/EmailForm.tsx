@@ -1,21 +1,21 @@
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 type EmailFormProps = {
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setNextStep: React.Dispatch<React.SetStateAction<boolean>>;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function EmailForm({
   email,
   setEmail,
-  setNextStep,
+  onClick
 }: EmailFormProps) {
   const [focused, setFocused] = useState(false);
 
-  const emailExists = (email: string) => email !== "" && setNextStep(true);
+  // const emailExists = (email: string) => email !== "" && setNextStep(true);
 
   return (
     <div className="flex-1 flex items-center justify-center bg-white rounded-2xl">
@@ -73,10 +73,10 @@ export default function EmailForm({
           </div>
         </div>
 
-        {/* Continue Button */}
+        {/* Login Next Step */}
         <button
           className="w-full py-3.5 bg-[#E8472A] hover:bg-[#d13d22] active:scale-[0.99] text-white rounded-xl text-sm font-semibold tracking-wide transition-all duration-200"
-          onClick={() => emailExists(email)}
+          onClick={onClick}
         >
           Continue
         </button>

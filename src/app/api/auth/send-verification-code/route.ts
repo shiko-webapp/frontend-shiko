@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   const res = await apiFetch(
-    `${process.env.AUTHSERVICE_URL}/auth/begin-login`,
+    `${process.env.VERIFICATIONSERVICE_URL}/auth/begin-login`,
     {
       method: "POST",
       headers: {

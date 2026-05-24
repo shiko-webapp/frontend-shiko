@@ -5,7 +5,7 @@ import AuthLayout from "./AuthLayout";
 
 export default function VerificationForm() {
     const [code, setCode] = useState<string[]>(Array(7).fill(""));
-    const [timer, setTimer] = useState(15);
+    const [timer, setTimer] = useState(60);
     const inputs = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
@@ -14,6 +14,18 @@ export default function VerificationForm() {
             return () => clearTimeout(t);
         }
     }, [timer]);
+
+    const sentRef = useRef(false);
+
+  useEffect(() => {
+    if (sentRef.current) return;
+
+    sentRef.current = true;
+
+    fetch("/api/auth/send-verification-code", {
+      method: "POST",
+    });
+  }, []);
 
     const handleChange = (index: number, value: string) => {
         if (!/^\d?$/.test(value)) return;

@@ -1,61 +1,23 @@
 "use client";
 
-import { Send } from "lucide-react";
-import { ChatMessage, liveClassService } from "../services/liveClassService";
-import { useState, useRef, useEffect } from "react";
-import { ChatHub } from "../services/chatHub";
+import { Send, UserCircle } from "lucide-react";
+import { ChatMessage } from "../services/liveClassService";
+import { useState } from "react";
+
 
 interface ChatPanelProps {
-    liveClassId: number;
+    messages: ChatMessage[];
     userId: string;
-    userEmail: string;
+    onSend: (content: string) => Promise<void>;
 }
 
-export default function ChatPanel({ liveClassId, userId, userEmail }: ChatPanelProps) {
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+export default function ChatPanel({ messages, userId, onSend }: ChatPanelProps) {
     const [newMessage, setNewMessage] = useState("");
-    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-    const hubRef = useRef<ChatHub | null>(null);
-
-    useEffect(() => {
-        liveClassService.getMessages(liveClassId)
-            .then(setMessages)
-            .catch(error => console.error("Failed to load messages:", error));
-
-        // Anslut till SignalR hubben för realtidsuppdateringar
-        const hub = new ChatHub();
-        hubRef.current = hub;
-
-        const connect = async () => {
-            await hub.start();
-            await hub.joinLiveClass(liveClassId);
-
-            // Lyssna på nya meddelanden från hubben
-            hub.onReceiveMessage((msg) => {
-                setMessages((prev) => [...prev, msg]);
-            });
-
-            hub.onUserJoined((data) => {
-                setCurrentUserId(data.userId); //Spara userId från JWT
-            });
-        }
-
-        connect();
-
-        return () => {
-            hub.leaveLiveClass(liveClassId);
-            hub.stop();
-        };
-    }, [liveClassId]);
 
     const handleSend = async () => {
-        if (!newMessage.trim() || !hubRef.current) return;
+        if (!newMessage.trim()) return;
 
-        await hubRef.current.sendMessage(
-            liveClassId,
-            newMessage
-        );
-
+        await onSend(newMessage);
         setNewMessage("");
     };
 
@@ -74,20 +36,50 @@ export default function ChatPanel({ liveClassId, userId, userEmail }: ChatPanelP
             </div>
 
             <div className="flex-1 overflow-y-auto">
+
                 {messages.map((msg) => {
                     const isOwn = userId === msg.senderId;
+
                     return (
-                        <div key={msg.id}
-                            className={`flex flex-col p-4 ${isOwn ? "items-end" : "items-start"}`} >
-                            <p>{isOwn ? "You" : msg.senderName}</p>
-                            <div className={`p-3 rounded-lg ${isOwn ? "bg-red-100" : "bg-gray-200"}`}>
-                                <p className="text-xs text-gray-400">{msg.content}</p>
+                        <div
+                            key={msg.id}
+                            className={`flex flex-col p-4 ${isOwn ? "items-end" : "items-start"
+                                }`}
+                        >
+                            {/* Header: namn + avatar på samma rad */}
+                            <div
+                                className={`flex items-center gap-2 mb-2 ${isOwn ? "flex-row-reverse" : "flex-row"
+                                    }`}
+                            >
+                                {msg.senderImageUrl ? (
+                                    <img
+                                        src={msg.senderImageUrl}
+                                        alt={msg.senderName}
+                                        className="h-8 w-8 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <UserCircle className="h-8 w-8 text-gray-400" />
+                                )}
+
+                                <p className="text-sm font-medium">
+                                    {isOwn ? "You" : msg.senderName}
+                                </p>
                             </div>
-                            <p className="text-xs text-gray-400">
+
+                            {/* Meddelande */}
+                            <div
+                                className={`p-3 rounded-lg ${isOwn ? "bg-red-100" : "bg-gray-200"
+                                    }`}
+                            >
+                                <p className="text-sm">{msg.content}</p>
+                            </div>
+
+                            {/* Tid */}
+                            <p className="text-xs text-gray-400 mt-1">
                                 {formatTime(msg.sentAt)}
                             </p>
                         </div>
-                    )
+                    );
                 })}
             </div>
 

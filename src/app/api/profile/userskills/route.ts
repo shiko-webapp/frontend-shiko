@@ -1,6 +1,6 @@
 export async function GET(req: Request) {
   const backendRes = await fetch(
-    `${process.env.SKILLS_API_URL}/api/skills`,
+    `${process.env.SKILLS_API_URL}/api/userskills`,
     {
       headers: {
         cookie: req.headers.get("cookie") || "",
@@ -16,15 +16,14 @@ export async function GET(req: Request) {
     },
   });
 }
-
 export async function POST(req: Request) {
   const body = await req.json();
   const backendRes = await fetch(
-    `${process.env.SKILLS_API_URL}/api/skills`,
+    `${process.env.SKILLS_API_URL}/api/userskills`,
     {
       method: "POST",
       headers: {
-        cookie: req.headers.get("cookie") || "",
+         cookie: req.headers.get("cookie") || "",
         "content-type": "application/json",
       },
       body: JSON.stringify(body),
@@ -39,11 +38,10 @@ export async function POST(req: Request) {
     },
   });
 }
-
 export async function DELETE(req: Request) {
   const { id } = await req.json();
   const backendRes = await fetch(
-    `${process.env.SKILLS_API_URL}/api/skills/${id}`,
+    `${process.env.SKILLS_API_URL}/api/userskills/${id}`,
     {
       method: "DELETE",
       headers: {

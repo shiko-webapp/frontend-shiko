@@ -10,15 +10,6 @@ import { ChatMessage } from "./liveClassService";
 export class ChatHub {
     private connection: signalR.HubConnection;
 
-    // constructor() {
-    //     this.connection = new signalR.HubConnectionBuilder()
-    //         .withUrl(chatEndpoints.hub, {
-    //             withCredentials: true
-    //         })
-    //         .withAutomaticReconnect()
-    //         .build();
-    // }
-
     constructor() {
     this.connection = new signalR.HubConnectionBuilder()
         .withUrl(chatEndpoints.hub, {
@@ -97,5 +88,14 @@ export class ChatHub {
         leavedAt: string;
     }) => void) : void {
         this.connection.on("UserLeft", callback);
+    }
+
+    onPresenceUpdated(callback: (users: Array<{
+        connectionId: string;
+        userId: string;
+        userName: string;
+        userImageUrl: string;
+    }>) => void): void {
+        this.connection.on("PresenceUpdated", callback);
     }
 }

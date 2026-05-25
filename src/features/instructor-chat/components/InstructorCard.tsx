@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { InstructorChat } from "./InstructorChat";
+import { IProfile } from "../../profile/models/IProfile";
 
 export interface IInstructor {
   firstName: string;
@@ -11,23 +12,38 @@ export interface IInstructor {
   description: string;
 }
 
-const mockInstructor: IInstructor = {
-  firstName: "Ahmed",
-  lastName: "Ali",
-  phoneNumber: "0729143335",
-  profileImageUrl: "https://unsplash.com",
-  description:
-    "Ahmed Ali is a digital marketer with hands-on experience in building and scaling brands across digital platforms. He specializes in creating data-informed marketing strategies that combine creativity with performance to deliver measurable growth.",
-};
+// const mockInstructor: IInstructor = {
+//   firstName: "Ahmed",
+//   lastName: "Ali",
+//   phoneNumber: "0729143335",
+//   profileImageUrl: "https://unsplash.com",
+//   description:
+//     "Ahmed Ali is a digital marketer with hands-on experience in building and scaling brands across digital platforms. He specializes in creating data-informed marketing strategies that combine creativity with performance to deliver measurable growth.",
+// };
 
-export const InstructorCard = () => {
-  const instructor = mockInstructor;
+interface IInstructorCardProps {
+  userName: string;
+  userId: string;
+  chatId: string;
+  instructor: IProfile;
+}
+
+export const InstructorCard = ({
+  userName,
+  userId,
+  chatId,
+  instructor,
+}: IInstructorCardProps) => {
+  //const instructor = mockInstructor;
   const [showChat, setShowChat] = useState(false);
 
   if (showChat) {
     return (
       <InstructorChat
-        instructorName={instructor.firstName}
+        chatId={chatId}
+        userName={userName}
+        userId={userId}
+        instructorName={instructor.firstName || "Unknown"}
         onBack={() => setShowChat(false)}
       />
     );
@@ -37,8 +53,8 @@ export const InstructorCard = () => {
     <section className="w-full space-y-6 font-sans">
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
         <img
-          src={instructor.profileImageUrl}
-          alt={instructor.firstName}
+          src={instructor.profileImageUrl || "/"}
+          alt={instructor.firstName || " "}
           className="w-25 h-25 rounded-full object-cover shrink-0"
         />
 

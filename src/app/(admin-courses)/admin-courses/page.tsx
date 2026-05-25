@@ -17,7 +17,7 @@ export default function AdminCourses() {
     imageUrl: "",
     description: "",
     keyPoints: [],
-    userId: "244a3391-327d-4277-a266-3f91ea53d374",
+    userId: "757b672d-1def-4715-a952-bd4f6c3c926a",
   });
   const [faq, setFaq] = useState<IFaqDto[]>([]);
   const [modal, setModal] = useState<{

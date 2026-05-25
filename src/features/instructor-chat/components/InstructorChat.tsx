@@ -1,75 +1,58 @@
 "use client";
 
-import React, { useState } from "react";
+import { useChat } from "../hooks/useChat";
 
 interface InstructorChatProps {
+  chatId: string;
+  userName: string;
+  userId: string;
+
   instructorName: string;
   onBack: () => void;
 }
 
-interface Message {
-  id: number;
-  text: string;
-  sender: "student" | "instructor";
-  timestamp: string;
-}
-
 export const InstructorChat = ({
+  chatId,
+  userName,
+  userId,
   instructorName,
   onBack,
 }: InstructorChatProps) => {
-  const [typedMessage, setTypedMessage] = useState("");
+  const {
+    currentUser,
+    isConnected,
+    messages,
+    message,
+    handleMessageChange,
+    sendMessage,
+  } = useChat({ chatId, userId });
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: `Hi there! Thanks for enrolling in the course. Do you have any questions about the current module?`,
-      sender: "instructor",
-      timestamp: "10:30 AM",
-    },
-    {
-      id: 2,
-      text: `Hi Ahmed! Yes, I was wondering if we will cover advanced marketing analytics later in the course?`,
-      sender: "student",
-      timestamp: "10:32 AM",
-    },
-    {
-      id: 3,
-      text: `Absolutely! Module 5 is entirely dedicated to data-driven marketing, conversion tracking, and scaling campaigns using Google Analytics.`,
-      sender: "instructor",
-      timestamp: "10:35 AM",
-    },
-  ]);
-
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!typedMessage.trim()) return;
-
-    const newMessage: Message = {
-      id: Date.now(),
-      text: typedMessage.trim(),
-      sender: "student",
-      timestamp: new Date().toLocaleTimeString([], {
+  const formatTime = (isoString: string) => {
+    try {
+      return new Date(isoString).toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
-      }),
-    };
-
-    setMessages([...messages, newMessage]);
-    setTypedMessage("");
+      });
+    } catch {
+      return "";
+    }
   };
 
   return (
     <section className="w-full bg-background border border-secondary-50 rounded-2xl shadow-sm overflow-hidden flex flex-col font-sans">
       <div className="bg-secondary-50 px-5 py-4 border-b border-secondary-50 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-quaternary-500 animate-pulse"></div>
+          <div
+            className={`w-2.5 h-2.5 rounded-full ${
+              isConnected ? "bg-quaternary-500 animate-pulse" : "bg-gray-400"
+            }`}
+          ></div>
           <div>
             <h5 className="text-base font-bold text-secondary-900 leading-tight">
               {instructorName}
             </h5>
             <span className="text-[11px] text-secondary-500 font-medium">
-              Active now
+              {isConnected ? "Active now" : "Connecting to chat..."}
             </span>
           </div>
         </div>
@@ -81,17 +64,21 @@ export const InstructorChat = ({
           ← Back to profile
         </button>
       </div>
+
       <div className="p-5 h-87.5 overflow-y-auto space-y-4 bg-[#FAFAFA]">
         {messages.map((msg) => {
-          const isStudent = msg.sender === "student";
+          const isStudent = msg.userId === userId;
 
           return (
             <div
-              key={msg.id}
+              key={msg.messageId}
               className={`flex flex-col ${
                 isStudent ? "items-end" : "items-start"
               }`}
             >
+              <span className="text-[11px] text-gray-400 mb-0.5 px-1">
+                {isStudent ? userName : instructorName}
+              </span>
               <div
                 className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-[14px] leading-relaxed shadow-xs ${
                   isStudent
@@ -103,28 +90,29 @@ export const InstructorChat = ({
               </div>
 
               <span className="text-[10px] text-secondary-500 mt-1 px-1 font-medium">
-                {msg.timestamp}
+                {formatTime(msg.createdAt)}
               </span>
             </div>
           );
         })}
       </div>
 
-      {/* Inmatningsfält och Skicka-knapp i botten */}
       <form
-        onSubmit={handleSendMessage}
+        onSubmit={sendMessage}
         className="p-4 border-t border-secondary-50 bg-background flex gap-3 items-center"
       >
         <input
           type="text"
-          value={typedMessage}
-          onChange={(e) => setTypedMessage(e.target.value)}
+          value={message}
+          onChange={(e) => handleMessageChange(e.target.value)}
           placeholder={`Write a message to ${instructorName}...`}
-          className="flex-1 px-4 py-2.5 bg-secondary-50 border border-secondary-50 rounded-full text-sm text-secondary-900 focus:outline-none focus:border-primary-300 transition-colors"
+          disabled={!isConnected}
+          className="flex-1 px-4 py-2.5 bg-secondary-50 border border-secondary-50 rounded-full text-sm text-secondary-900 focus:outline-none focus:border-primary-300 transition-colors disabled:opacity-50"
         />
         <button
           type="submit"
-          className="btn btn-sm btn-secondary rounded-full! px-5 h-9.5"
+          disabled={!isConnected}
+          className="btn btn-sm btn-secondary rounded-full! px-5 h-9.5 disabled:opacity-50"
         >
           Send
         </button>

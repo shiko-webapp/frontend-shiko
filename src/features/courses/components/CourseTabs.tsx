@@ -4,11 +4,18 @@ import { useState } from "react";
 import { IFaq } from "../../faq/models/IFaq";
 import { FaqCard } from "../../faq/components/FaqCard";
 import { InstructorCard } from "../../instructor-chat/components/InstructorCard";
+import { IProfile } from "../../profile/models/IProfile";
 
 interface CourseTabsProps {
   description: string | null;
   keyPoints: string[];
   faqs: IFaq[];
+  instructor: IProfile;
+
+  userName: string;
+  userId: string;
+  chatId: string;
+  role: string;
 }
 
 type TabType = "overview" | "faqs" | "instructor";
@@ -19,7 +26,16 @@ const menuCategories = [
   { title: "Instructor" },
 ];
 
-export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
+export function CourseTabs({
+  description,
+  keyPoints,
+  faqs,
+  userName,
+  userId,
+  chatId,
+  role,
+  instructor,
+}: CourseTabsProps) {
   const [activeTab, setActiveTab] = useState<string>("Overview");
 
   return (
@@ -73,7 +89,23 @@ export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
           </div>
         )}
         {activeTab === "FAQs" && <FaqCard faqs={faqs}></FaqCard>}
-        {activeTab === "Instructor" && <InstructorCard />}
+
+        {role != "Instructor" && activeTab === "Instructor" && (
+          <InstructorCard
+            userName={userName}
+            userId={userId}
+            chatId={chatId}
+            instructor={instructor}
+          />
+        )}
+        {/* {activeTab === "Instructor" && (
+          <InstructorCard
+            userName={userName}
+            userId={userId}
+            chatId={chatId}
+            instructor={instructor}
+          />
+        )} */}
       </div>
     </section>
   );

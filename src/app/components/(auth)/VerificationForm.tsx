@@ -15,17 +15,6 @@ export default function VerificationForm() {
         }
     }, [timer]);
 
-    const sentRef = useRef(false);
-
-  useEffect(() => {
-    if (sentRef.current) return;
-
-    sentRef.current = true;
-
-    fetch("/api/auth/send-verification-code", {
-      method: "POST",
-    });
-  }, []);
 
     const handleChange = (index: number, value: string) => {
         if (!/^\d?$/.test(value)) return;
@@ -48,7 +37,9 @@ export default function VerificationForm() {
         setCode(newCode);
         inputs.current[Math.min(pasted.length, 6)]?.focus();
     };
-
+    const handleOnClick = async (e) => {
+        fetch("POST", "/api/auth/send-verification-code",{headers:{"Content-Type": "applicatoin/json"}, body: {}})
+    }
     return (
         <AuthLayout>
             <h1 className="text-[38px] font-bold text-gray-900 tracking-tight leading-tight mb-2">
@@ -94,7 +85,9 @@ export default function VerificationForm() {
                 </div>
             </div>
 
-            <button className="w-full py-3.5 bg-[#E8472A] hover:bg-[#d13d22] active:scale-[0.99] text-white rounded-xl text-sm font-semibold tracking-wide transition-all duration-200">
+            <button
+                onClick={}
+                className="w-full py-3.5 bg-[#E8472A] hover:bg-[#d13d22] active:scale-[0.99] text-white rounded-xl text-sm font-semibold tracking-wide transition-all duration-200">
                 Continue
             </button>
         </AuthLayout>

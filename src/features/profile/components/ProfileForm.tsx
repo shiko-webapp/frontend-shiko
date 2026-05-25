@@ -2,53 +2,78 @@
 import { useState } from "react";
 import { IProfile } from "../models/IProfile";
 import { updateProfile, IUpdateProfileRequest } from "../services/profileService";
+import { addUserAchievement } from "../services/achievementsService";
+import { IUserAchievement } from "../models/IUserAchievement";
+
 
 
 interface IProfileFormProps {
   profile: IProfile;
+  achievements: IUserAchievement[];
   onSave: (updatedProfile: IProfile) => void;
+  onAchievementAdded: (achievement: IUserAchievement) => void;
 }
 
-export const ProfileForm = ({ profile, onSave }: IProfileFormProps) => {
+export const ProfileForm = ({ profile, achievements, onSave, onAchievementAdded }: IProfileFormProps) => {
+  const [firstName, setFirstName] = useState(profile.firstName ?? "");
+  const [lastName, setLastName] = useState(profile.lastName ?? "");
   const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber ?? "");
   const [description, setDescription] = useState(profile.description ?? "");
+  const [error, setError] = useState("");
 
-const handleSubmit = async () => {
-  try {
-    const request: IUpdateProfileRequest = {
-      phoneNumber,
-      description,
-      profileImageUrl: profile.profileImageUrl,
-    };
-    const updatedProfile = await updateProfile(request);
-    onSave(updatedProfile);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const handleSubmit = async () => {
+    if (!firstName.trim() || !lastName.trim()) {
+      setError("First name and last name are required.");
+      return;
+    }
+    setError("");
+    try {
+      const request: IUpdateProfileRequest = {
+        firstName,
+        lastName,
+        phoneNumber,
+        description,
+        profileImageUrl: profile.profileImageUrl,
+      };
+      const updatedProfile = await updateProfile(request);
+      onSave(updatedProfile);
+
+      // Achievement Profile Complete
+      if (phoneNumber.trim() && description.trim()) {
+        const alreadyHas = achievements.some(a => a.achievementName === "Profile Complete");
+        if (!alreadyHas) {
+          const achievement = await addUserAchievement("Profile Complete");
+          onAchievementAdded(achievement);
+        }
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <section className="bg-white rounded-2xl shadow-sm border border-secondary-50 p-6">
 
-      {/* First name - read only */}
+      {/* First name */}
       <div className="mb-4">
-        <label className="block text-small font-semibold text-secondary-900 mb-1">First name</label>
+        <label className="block text-small font-semibold text-secondary-900 mb-1">First name *</label>
         <input
           type="text"
-          value={profile.firstName ?? ""}
-          readOnly
-          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small bg-secondary-50 text-secondary-500 cursor-not-allowed"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
       </div>
 
-      {/* Last name - read only */}
+      {/* Last name */}
       <div className="mb-4">
-        <label className="block text-small font-semibold text-secondary-900 mb-1">Last name</label>
+        <label className="block text-small font-semibold text-secondary-900 mb-1">Last name *</label>
         <input
           type="text"
-          value={profile.lastName ?? ""}
-          readOnly
-          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small bg-secondary-50 text-secondary-500 cursor-not-allowed"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
       </div>
 
@@ -75,12 +100,19 @@ const handleSubmit = async () => {
         />
       </div>
 
+      {error && (
+        <p className="text-primary-500 text-small mb-3">{error}</p>
+      )}
+
       {/* Buttons */}
       <div className="flex gap-3">
         <button
           onClick={() => {
+            setFirstName(profile.firstName ?? "");
+            setLastName(profile.lastName ?? "");
             setPhoneNumber(profile.phoneNumber ?? "");
             setDescription(profile.description ?? "");
+            setError("");
           }}
           className="btn btn-md btn-secondary"
         >

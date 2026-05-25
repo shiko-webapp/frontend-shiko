@@ -12,6 +12,19 @@ import { ISkill } from "../models/ISkill";
 import { addUserSkill, removeUserSkill } from "../services/userSkillsService";
 import { getSkills } from "../services/skillsService";
 import { createSkill, deleteSkill } from "../services/adminSkillsService";
+import { addUserAchievement } from "../services/achievementsService";
+import { faTrophy, faBolt, faRightToBracket, faUser, faImage, faStar } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+
+const achievementIcons: Record<string, IconDefinition> = {
+  "Course Completed": faTrophy,
+  "Fast Learner": faBolt,
+  "First Login": faRightToBracket,
+  "Profile Complete": faUser,
+  "Profile Picture Set": faImage,
+  "Top Student": faStar,
+};
+
 
 interface IProfileCardProps {
   profile: IProfile;
@@ -20,9 +33,10 @@ interface IProfileCardProps {
   role: string;
   onProfileUpdate: (updatedProfile: IProfile) => void;
   onSkillsUpdate: (skills: IUserSkill[]) => void;
+  onAchievementAdded: (achievement: IUserAchievement) => void;
 }
 
-export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpdate, onSkillsUpdate }: IProfileCardProps) => {
+export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpdate, onSkillsUpdate, onAchievementAdded }: IProfileCardProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = () => {
@@ -31,20 +45,31 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if(!file) return;
+    if (!file) return;
 
     try {
-      const uploaded = await uploadFile(file); 
+      const uploaded = await uploadFile(file);
       const updatedProfile = await updateProfile({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
         phoneNumber: profile.phoneNumber,
         description: profile.description,
         profileImageUrl: uploaded.fileUrl,
       });
       onProfileUpdate(updatedProfile);
+
+      // Achievement - Profile Picture Set
+      const alreadyHas = achievements.some(a => a.achievementName === "Profile Picture Set");
+      if (!alreadyHas) {
+        const achievement = await addUserAchievement("Profile Picture Set");
+        onAchievementAdded(achievement);
+      }
+
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
   const [showSkillPicker, setShowSkillPicker] = useState(false);
   const [allSkills, setAllSkills] = useState<ISkill[]>([]);
   const [activeTab, setActiveTab] = useState<"profile" | "manage">("profile");
@@ -63,16 +88,15 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     setAllSkillsList(allSkillsList.filter(s => s.id !== id));
   };
 
-const handleOpenManageTab = async () => {
-  const fetched = await getSkills();
-  setAllSkillsList(fetched);
-  setActiveTab("manage");
-};
+  const handleOpenManageTab = async () => {
+    const fetched = await getSkills();
+    setAllSkillsList(fetched);
+    setActiveTab("manage");
+  };
 
   const handleOpenSkillPicker = async () => {
     if (!showSkillPicker) {
       const fetched = await getSkills();
-      // Filtrera bort skills användaren redan har
       const available = fetched.filter(
         s => !skills.some(us => us.skillId === s.id)
       );
@@ -94,7 +118,7 @@ const handleOpenManageTab = async () => {
 
   return (
     <section className="bg-white rounded-2xl overflow-hidden shadow-sm border border-secondary-50 flex flex-col">
-      
+
       {/* Banner */}
       <div className="h-32 bg-gradient-to-r from-purple-900 to-pink-600" />
 
@@ -128,21 +152,19 @@ const handleOpenManageTab = async () => {
             <div className="flex gap-2 mt-3 mb-2 border-b border-secondary-50 justify-center">
               <button
                 onClick={() => setActiveTab("profile")}
-                className={`text-small font-bold pb-2 px-1 border-b-2 transition-colors cursor-pointer ${
-                  activeTab === "profile"
-                    ? "border-primary-500 text-primary-500"
-                    : "border-transparent text-secondary-500 hover:text-secondary-900"
-                }`}
+                className={`text-small font-bold pb-2 px-1 border-b-2 transition-colors cursor-pointer ${activeTab === "profile"
+                  ? "border-primary-500 text-primary-500"
+                  : "border-transparent text-secondary-500 hover:text-secondary-900"
+                  }`}
               >
                 Profile
               </button>
               <button
                 onClick={handleOpenManageTab}
-                className={`text-small font-bold pb-2 px-1 border-b-2 transition-colors cursor-pointer ${
-                  activeTab === "manage"
-                    ? "border-primary-500 text-primary-500"
-                    : "border-transparent text-secondary-500 hover:text-secondary-900"
-                }`}
+                className={`text-small font-bold pb-2 px-1 border-b-2 transition-colors cursor-pointer ${activeTab === "manage"
+                  ? "border-primary-500 text-primary-500"
+                  : "border-transparent text-secondary-500 hover:text-secondary-900"
+                  }`}
               >
                 Manage Skills
               </button>
@@ -231,9 +253,17 @@ const handleOpenManageTab = async () => {
                 <p className="font-bold text-secondary-900 mb-2">Achievements</p>
                 <div className="flex flex-wrap gap-2">
                   {achievements.map((achievement) => (
-                    <span key={achievement.id} className="text-small bg-tertiary-50 text-tertiary-500 rounded-full px-3 py-1">
-                      {achievement.achievementName}
-                    </span>
+                    <div key={achievement.id} className="relative group">
+                      <span className="w-10 h-10 rounded-full flex items-center justify-center cursor-default transition-colors bg-yellow-100 text-yellow-500 hover:bg-yellow-400 hover:text-white">
+                        {achievementIcons[achievement.achievementName] && (
+                          <FontAwesomeIcon icon={achievementIcons[achievement.achievementName]} />
+                        )}
+                      </span>
+                      {/* Tooltip */}
+                      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-secondary-900 text-white text-small rounded-lg px-2 py-1 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        {achievement.achievementName}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

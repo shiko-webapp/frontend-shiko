@@ -5,6 +5,12 @@ import { getCourseById } from "@/src/features/courses/services/courseService";
 import { getAllFaqs } from "@/src/features/faq/services/faqService";
 import { getUserById } from "@/src/features/instructor-chat/services/userService";
 import { requireUser } from "@/src/lib/auth";
+export interface IUser {
+  id: string;
+  email: string;
+  role: "Student" | "Admin" | "Instructor" | string;
+  permissions: string[];
+}
 
 export default async function CourseDetailsPage({
   params,
@@ -15,12 +21,6 @@ export default async function CourseDetailsPage({
   const course = await getCourseById(courseId);
   const faqs = await getAllFaqs(courseId);
 
-  interface IUser {
-    id: string;
-    email: string;
-    role: "Student" | "Admin" | "Instructor" | string;
-    permissions: string[];
-  }
   const user: IUser = await requireUser();
   console.log("User: ", user);
   const instructor = await getUserById(course.userId);

@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   const res = await apiFetch(
-    `${process.env.VERIFICATIONSERVICE_URL}/auth/begin-login`,
+    `${process.env.VERIFICATIONSERVICE_URL}/api/verification/verify`,
     {
       method: "POST",
       headers: {
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
   if (!res.ok) {
     return NextResponse.json(
-      { message: "Begin Login failed" },
+      { message: "Verification Failed" },
       { status: 401 },
     );
   }

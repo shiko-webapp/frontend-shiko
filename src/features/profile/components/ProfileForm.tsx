@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { IProfile } from "../models/IProfile";
-import { updateProfile } from "../services/profileService";
+import { updateProfile, IUpdateProfileRequest } from "../services/profileService";
+
 
 interface IProfileFormProps {
   profile: IProfile;
@@ -9,20 +10,17 @@ interface IProfileFormProps {
 }
 
 export const ProfileForm = ({ profile, onSave }: IProfileFormProps) => {
-  const [firstName, setFirstName] = useState(profile.firstName ?? "");
-  const [lastName, setLastName] = useState(profile.lastName ?? "");
   const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber ?? "");
   const [description, setDescription] = useState(profile.description ?? "");
 
 const handleSubmit = async () => {
   try {
-    const updatedProfile = await updateProfile({
-      ...profile,
-      firstName,
-      lastName,
+    const request: IUpdateProfileRequest = {
       phoneNumber,
       description,
-    });
+      profileImageUrl: profile.profileImageUrl,
+    };
+    const updatedProfile = await updateProfile(request);
     onSave(updatedProfile);
   } catch (error) {
     console.log(error);
@@ -32,25 +30,25 @@ const handleSubmit = async () => {
   return (
     <section className="bg-white rounded-2xl shadow-sm border border-secondary-50 p-6">
 
-      {/* First name */}
+      {/* First name - read only */}
       <div className="mb-4">
-        <label className="block text-small font-semibold text-secondary-900 mb-1">First name *</label>
+        <label className="block text-small font-semibold text-secondary-900 mb-1">First name</label>
         <input
           type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500"
+          value={profile.firstName ?? ""}
+          readOnly
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small bg-secondary-50 text-secondary-500 cursor-not-allowed"
         />
       </div>
 
-      {/* Last name */}
+      {/* Last name - read only */}
       <div className="mb-4">
-        <label className="block text-small font-semibold text-secondary-900 mb-1">Last name *</label>
+        <label className="block text-small font-semibold text-secondary-900 mb-1">Last name</label>
         <input
           type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small focus:outline-none focus:ring-2 focus:ring-primary-500"
+          value={profile.lastName ?? ""}
+          readOnly
+          className="w-full border border-secondary-50 rounded-lg px-4 py-2 text-small bg-secondary-50 text-secondary-500 cursor-not-allowed"
         />
       </div>
 
@@ -81,8 +79,6 @@ const handleSubmit = async () => {
       <div className="flex gap-3">
         <button
           onClick={() => {
-            setFirstName(profile.firstName ?? "");
-            setLastName(profile.lastName ?? "");
             setPhoneNumber(profile.phoneNumber ?? "");
             setDescription(profile.description ?? "");
           }}

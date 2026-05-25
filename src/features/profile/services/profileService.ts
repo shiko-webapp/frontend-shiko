@@ -2,6 +2,8 @@ import { apiFetch } from "@/src/lib/apiFetch";
 import { IProfile } from "../models/IProfile";
 
 export interface IUpdateProfileRequest {
+  firstName: string | null;
+  lastName: string | null;
   phoneNumber: string | null;
   description: string | null;
   profileImageUrl: string | null;

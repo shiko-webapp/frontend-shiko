@@ -50,6 +50,8 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     try {
       const uploaded = await uploadFile(file);
       const updatedProfile = await updateProfile({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
         phoneNumber: profile.phoneNumber,
         description: profile.description,
         profileImageUrl: uploaded.fileUrl,
@@ -57,8 +59,11 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
       onProfileUpdate(updatedProfile);
 
       // Achievement - Profile Picture Set
-      const achievement = await addUserAchievement("Profile Picture Set");
-      onAchievementAdded(achievement);
+      const alreadyHas = achievements.some(a => a.achievementName === "Profile Picture Set");
+      if (!alreadyHas) {
+        const achievement = await addUserAchievement("Profile Picture Set");
+        onAchievementAdded(achievement);
+      }
 
     } catch (error) {
       console.log(error);
@@ -92,7 +97,6 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
   const handleOpenSkillPicker = async () => {
     if (!showSkillPicker) {
       const fetched = await getSkills();
-      // Filtrera bort skills användaren redan har
       const available = fetched.filter(
         s => !skills.some(us => us.skillId === s.id)
       );

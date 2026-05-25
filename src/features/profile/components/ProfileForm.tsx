@@ -2,14 +2,18 @@
 import { useState } from "react";
 import { IProfile } from "../models/IProfile";
 import { updateProfile, IUpdateProfileRequest } from "../services/profileService";
+import { addUserAchievement } from "../services/achievementsService";
+import { IUserAchievement } from "../models/IUserAchievement";
+
 
 
 interface IProfileFormProps {
   profile: IProfile;
   onSave: (updatedProfile: IProfile) => void;
+  onAchievementAdded: (achievement: IUserAchievement) => void;
 }
 
-export const ProfileForm = ({ profile, onSave }: IProfileFormProps) => {
+export const ProfileForm = ({ profile, onSave, onAchievementAdded }: IProfileFormProps) => {
   const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber ?? "");
   const [description, setDescription] = useState(profile.description ?? "");
 
@@ -22,6 +26,13 @@ const handleSubmit = async () => {
     };
     const updatedProfile = await updateProfile(request);
     onSave(updatedProfile);
+
+    // Achievement Profile Complete
+    if (phoneNumber.trim() && description.trim()) {
+      const achievement = await addUserAchievement("Profile Complete");
+      onAchievementAdded(achievement);
+    }
+
   } catch (error) {
     console.log(error);
   }

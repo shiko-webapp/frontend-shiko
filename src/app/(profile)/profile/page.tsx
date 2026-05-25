@@ -57,6 +57,7 @@ return (
           role={currentUser?.role ?? "Student"}
           onProfileUpdate={(updatedProfile) => setProfile(updatedProfile)}
           onSkillsUpdate={(updatedSkills) => setSkills(updatedSkills)}
+          onAchievementAdded={(achievement) => setAchievements([...achievements, achievement])}
         />
         </div>
       )}
@@ -65,6 +66,7 @@ return (
         <ProfileForm
           profile={profile ?? { id: 0, userId: "", firstName: "", lastName: "", phoneNumber: "", description: "", profileImageUrl: "" }}
           onSave={(updatedProfile) => setProfile(updatedProfile)}
+          onAchievementAdded={(achievement) => setAchievements([...achievements, achievement])}
         />
       </div>
     </div>

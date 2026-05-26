@@ -65,7 +65,6 @@ return (
       <div className="flex-1">
         <ProfileForm
           profile={profile ?? { id: 0, userId: "", firstName: "", lastName: "", phoneNumber: "", description: "", profileImageUrl: "" }}
-          achievements={achievements}
           onSave={(updatedProfile) => setProfile(updatedProfile)}
           onAchievementAdded={(achievement) => setAchievements([...achievements, achievement])}
         />

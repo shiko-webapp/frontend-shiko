@@ -5,7 +5,7 @@ export const getUserAchievements = async (): Promise<IUserAchievement[]> => {
   const res = await apiFetch(`/api/profile/achievements`);
   return res.json();
 };
-export const addUserAchievement = async (achievementName: string): Promise<IUserAchievement> => {
+export const addUserAchievement = async (achievementName: string): Promise<IUserAchievement | null> => {
   const res = await apiFetch(`/api/profile/achievements`, {
     method: "POST",
     headers: {
@@ -13,5 +13,7 @@ export const addUserAchievement = async (achievementName: string): Promise<IUser
     },
     body: JSON.stringify({ achievementName }),
   });
+  
+  if (res.status === 409) return null;
   return res.json();
 };

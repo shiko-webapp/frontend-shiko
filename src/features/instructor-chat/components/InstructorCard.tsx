@@ -12,15 +12,6 @@ export interface IInstructor {
   description: string;
 }
 
-// const mockInstructor: IInstructor = {
-//   firstName: "Ahmed",
-//   lastName: "Ali",
-//   phoneNumber: "0729143335",
-//   profileImageUrl: "https://unsplash.com",
-//   description:
-//     "Ahmed Ali is a digital marketer with hands-on experience in building and scaling brands across digital platforms. He specializes in creating data-informed marketing strategies that combine creativity with performance to deliver measurable growth.",
-// };
-
 interface IInstructorCardProps {
   userName: string;
   userId: string;
@@ -34,7 +25,6 @@ export const InstructorCard = ({
   chatId,
   instructor,
 }: IInstructorCardProps) => {
-  //const instructor = mockInstructor;
   const [showChat, setShowChat] = useState(false);
 
   if (showChat) {
@@ -43,6 +33,7 @@ export const InstructorCard = ({
         chatId={chatId}
         userName={userName}
         userId={userId}
+        currentUserId={userId}
         instructorName={instructor.firstName || "Unknown"}
         onBack={() => setShowChat(false)}
       />

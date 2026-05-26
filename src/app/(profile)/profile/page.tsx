@@ -9,6 +9,7 @@ import { getUserAchievements } from "@/src/features/profile/services/achievement
 import { ProfileCard } from "@/src/features/profile/components/ProfileCard";
 import { ProfileForm } from "@/src/features/profile/components/ProfileForm";
 import { ICurrentUser } from "@/src/features/profile/models/ICurrentUser";
+import { Header } from "@/src/components/header/Header";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<IProfile | null>(null);
@@ -44,7 +45,9 @@ export default function ProfilePage() {
   if (isLoading) return <p>Loading...</p>;
 
 return (
+  
   <main className="min-h-screen p-8">
+    <Header profile={profile} currentUser={currentUser} />
     <h4 className="mb-6">Profile</h4>
     <div className="flex gap-6 items-start">
       {/* Profile Card */}

@@ -12,14 +12,11 @@ export default async function Home() {
 
   if (!user) redirect("/login");
 
-  // Hårdkodade siffror för statistik (kan enkelt hämtas från API senare)
-  const totalCoursesCount = 35;
   const liveClassesCount = 10;
 
   return (
     <main className="bg-secondary-50 min-h-screen p-4 md:p-8 w-full font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Välkomsthälsning överst på dashboarden */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h4 className="text-secondary-900 font-bold">
@@ -30,10 +27,9 @@ export default async function Home() {
             </p>
           </div>
 
-          {/* Instruktörsknapp: visas endast om rollen matchar */}
           {user.role === "Instructor" && (
             <Link
-              href="/admin-courses"
+              href="/instructor-dashboard"
               className="btn btn-md btn-primary rounded-full! shadow-xs self-start sm:self-auto"
             >
               🛠 My Courses
@@ -65,7 +61,6 @@ export default async function Home() {
               </div>
             </Link>
 
-            {/* Kort 2: Live Classes */}
             <Link
               href="/live"
               className="bg-background rounded-2xl p-6 border border-secondary-50/50 flex flex-col justify-between shadow-xs min-h-40 transition-all hover:shadow-md"
@@ -89,7 +84,6 @@ export default async function Home() {
             </Link>
           </div>
 
-          {/* HÖGER SIDA: Profilruta (tar upp 1 kolumn) */}
           <Link
             href="/profile"
             className="bg-background rounded-2xl p-6 border border-secondary-50/50 shadow-xs flex flex-col items-center justify-center text-center space-y-4"

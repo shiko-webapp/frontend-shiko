@@ -1,7 +1,6 @@
-
 import { getData, postData } from "@/src/services/serviceBase/serviceBase";
 import { IFaq } from "../models/IFaq";
-import { IFaqDto } from "../../admin-courses/Dtos/IFaqDto";
+import { IFaqDto } from "../../instructor-courses/Dtos/IFaqDto";
 
 export const getAllFaqs = async (courseId: string): Promise<IFaq[]> => {
   try {

@@ -22,7 +22,6 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
   return (
     <section className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Course Title */}
         <div className="flex flex-col gap-2 lg:col-span-2">
           <label className="text-small font-semibold text-secondary-900">
             Course Title
@@ -37,7 +36,6 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
           />
         </div>
 
-        {/* Image File Selector Button */}
         <div className="flex flex-col gap-2">
           <label className="text-small font-semibold text-secondary-900">
             Course Image
@@ -61,7 +59,6 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Number of Lessons */}
         <div className="flex flex-col gap-2">
           <label className="text-small font-semibold text-secondary-900">
             Number of Lessons
@@ -77,7 +74,6 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
           />
         </div>
 
-        {/* Duration (Minutes) */}
         <div className="flex flex-col gap-2">
           <label className="text-small font-semibold text-secondary-900">
             Duration (Minutes)
@@ -94,7 +90,6 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
         </div>
       </div>
 
-      {/* Skicka vidare propsen till din DescriptionSection om den också behöver uppdatera statet */}
       <DescriptionSection
         courseForm={courseForm}
         onFieldChange={onFieldChange}

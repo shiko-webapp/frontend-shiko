@@ -2,6 +2,8 @@ import { useState } from "react";
 import { DescriptionSection } from "./DescriptionSection";
 import { ICreateCourseDto } from "../Dtos/ICreateCourseDto";
 import { KeyPointsSection } from "./KeyPointsSection";
+import { uploadFile } from "../../profile/services/fileHandlerService";
+// Justera sökvägen till där din uploadFile-funktion ligger
 
 interface ICourseFormProps {
   courseForm: ICreateCourseDto;
@@ -10,12 +12,33 @@ interface ICourseFormProps {
 
 export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false); // Nytt state för laddningsindikator
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Gjorde funktionen asynkron (async)
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setSelectedFile(file);
-      onFieldChange("imageUrl", `/images/${file.name}`);
+      setIsUploading(true); // Starta laddnings-animering
+
+      try {
+        // 1. Skicka filen till ditt filehandler-API över nätverket
+        const response = await uploadFile(file);
+
+        // 2. Spara den returnerade URL:en direkt i förälderns courseForm-state!
+        // (Beroende på ditt IFileUpload-interface, läs response.url eller response.fileUrl)
+        onFieldChange("imageUrl", response.fileUrl);
+
+        console.log(
+          "Image successfully stored in Azure Blob Storage:",
+          response
+        );
+      } catch (error) {
+        console.error("File upload crashed:", error);
+        alert("Kunde inte ladda upp bilden till lagringsserver, försök igen.");
+      } finally {
+        setIsUploading(false); // Stäng av laddnings-animering
+      }
     }
   };
 
@@ -47,12 +70,20 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
               onChange={handleFileChange}
               className="hidden"
               id="course-image-upload"
+              disabled={isUploading} // Inaktivera input under uppladdning
             />
             <label
               htmlFor="course-image-upload"
-              className="btn btn-md btn-secondary w-full cursor-pointer flex items-center justify-center gap-2"
+              className={`btn btn-md btn-secondary w-full cursor-pointer flex items-center justify-center gap-2 ${
+                isUploading ? "opacity-50 pointer-events-none" : ""
+              }`}
             >
-              📁 {selectedFile ? selectedFile.name : "Choose Image File"}
+              {/* Dynamisk text på knappen baserat på om den laddar upp */}
+              {isUploading
+                ? "⏳ Uploading Image..."
+                : selectedFile
+                ? `📁 ${selectedFile.name}`
+                : "Choose Image File"}
             </label>
           </div>
         </div>
@@ -94,10 +125,7 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
         courseForm={courseForm}
         onFieldChange={onFieldChange}
       />
-      <KeyPointsSection
-        courseForm={courseForm}
-        onFieldChange={onFieldChange}
-      ></KeyPointsSection>
+      <KeyPointsSection courseForm={courseForm} onFieldChange={onFieldChange} />
     </section>
   );
 };

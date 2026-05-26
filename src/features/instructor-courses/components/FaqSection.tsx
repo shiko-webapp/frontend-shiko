@@ -8,7 +8,6 @@ interface IFaqSectionProps {
 }
 
 export const FaqSection = ({ faq, setFaq }: IFaqSectionProps) => {
-  // Endast textfälten stannar kvar lokalt
   const [faqQuestion, setFaqQuestion] = useState("");
   const [faqAnswer, setFaqAnswer] = useState("");
 
@@ -16,7 +15,6 @@ export const FaqSection = ({ faq, setFaq }: IFaqSectionProps) => {
     e.preventDefault();
     if (faqQuestion.trim() === "" || faqAnswer.trim() === "") return;
 
-    // Uppdaterar arrayen i förälderns state
     setFaq((prev) => [
       ...prev,
       { question: faqQuestion.trim(), answer: faqAnswer.trim() },
@@ -27,7 +25,6 @@ export const FaqSection = ({ faq, setFaq }: IFaqSectionProps) => {
   };
 
   const handleRemoveFaq = (indexToRemove: number) => {
-    // Tar bort via förälderns state
     setFaq((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
@@ -67,7 +64,6 @@ export const FaqSection = ({ faq, setFaq }: IFaqSectionProps) => {
         </div>
       </div>
 
-      {/* Läser listan direkt från proppen (faq) */}
       {faq && faq.length > 0 && (
         <div className="space-y-2 pt-2">
           {faq.map((item, index) => (

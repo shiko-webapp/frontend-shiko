@@ -1,4 +1,8 @@
-import { PutDataAsync, postData } from "@/src/services/serviceBase/serviceBase";
+import {
+  PutDataAsync,
+  deleteData,
+  postData,
+} from "@/src/services/serviceBase/serviceBase";
 import { ICourse } from "../../courses/models/ICourse";
 import { ICreateCourseDto } from "../Dtos/ICreateCourseDto";
 import { IUpdateCourseDto } from "../Dtos/IUpdateCourseDto";
@@ -38,6 +42,16 @@ export const updateCourse = async (
     return true;
   } catch (error) {
     console.error("Failed to update course via PutDataAsync:", error);
+    return false;
+  }
+};
+
+export const deleteCourse = async (courseId: string) => {
+  try {
+    const url = process.env.NEXT_PUBLIC_COURSE_API_URL || "";
+    const deleted = await deleteData(`${url}/${courseId}`);
+    return true;
+  } catch (error) {
     return false;
   }
 };

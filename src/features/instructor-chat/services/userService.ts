@@ -4,7 +4,7 @@ import { IProfile } from "../../profile/models/IProfile";
 export const getUserById = async (userId: string) => {
   try {
     const url = process.env.PROFILE_API_URL;
-    const user = await getData<IProfile>(`${url}api/profile/${userId}`);
+    const user = await getData<IProfile>(`${url}/api/profile/${userId}`);
 
     return user;
   } catch (error) {

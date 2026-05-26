@@ -59,11 +59,8 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
       onProfileUpdate(updatedProfile);
 
       // Achievement - Profile Picture Set
-      const alreadyHas = achievements.some(a => a.achievementName === "Profile Picture Set");
-      if (!alreadyHas) {
-        const achievement = await addUserAchievement("Profile Picture Set");
-        onAchievementAdded(achievement);
-      }
+      const achievement = await addUserAchievement("Profile Picture Set");
+      if (achievement) onAchievementAdded(achievement);
 
     } catch (error) {
       console.log(error);

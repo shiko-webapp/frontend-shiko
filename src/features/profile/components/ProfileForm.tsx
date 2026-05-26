@@ -9,12 +9,11 @@ import { IUserAchievement } from "../models/IUserAchievement";
 
 interface IProfileFormProps {
   profile: IProfile;
-  achievements: IUserAchievement[];
   onSave: (updatedProfile: IProfile) => void;
   onAchievementAdded: (achievement: IUserAchievement) => void;
 }
 
-export const ProfileForm = ({ profile, achievements, onSave, onAchievementAdded }: IProfileFormProps) => {
+export const ProfileForm = ({ profile, onSave, onAchievementAdded }: IProfileFormProps) => {
   const [firstName, setFirstName] = useState(profile.firstName ?? "");
   const [lastName, setLastName] = useState(profile.lastName ?? "");
   const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber ?? "");
@@ -40,11 +39,8 @@ export const ProfileForm = ({ profile, achievements, onSave, onAchievementAdded 
 
       // Achievement Profile Complete
       if (phoneNumber.trim() && description.trim()) {
-        const alreadyHas = achievements.some(a => a.achievementName === "Profile Complete");
-        if (!alreadyHas) {
-          const achievement = await addUserAchievement("Profile Complete");
-          onAchievementAdded(achievement);
-        }
+        const achievement = await addUserAchievement("Profile Complete");
+        if (achievement) onAchievementAdded(achievement);
       }
 
     } catch (error) {

@@ -127,7 +127,9 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
               {profile.profileImageUrl ? (
                 <img src={profile.profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-secondary-50" />
+                <div className="w-full h-full bg-secondary-50 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faUser} className="text-secondary-500 text-2xl" />
+                </div>
               )}
             </div>
             {/* Edit icon */}

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ICourse } from "../../courses/models/ICourse";
 
 interface ICourseCardEditProps {
@@ -25,9 +26,12 @@ export const CourseCardEdit = ({ course }: ICourseCardEditProps) => {
         <span className="text-[11px] font-mono text-secondary-500 truncate max-w-37.5">
           ID: {course.id.slice(0, 8)}...
         </span>
-        <button className="text-xs font-bold text-primary-300 hover:text-primary-500 transition-colors cursor-pointer">
+        <Link
+          href={`/instructor-courses/${course.id}`}
+          className="text-xs font-bold text-primary-300 hover:text-primary-500 transition-colors cursor-pointer"
+        >
           Edit Course →
-        </button>
+        </Link>
       </div>
     </div>
   );

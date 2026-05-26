@@ -5,6 +5,7 @@ import { CourseCardEdit } from "@/src/features/instructor-overview/components/Co
 import { requireUser } from "@/src/lib/auth";
 import { IUser } from "../../(course)/courses/[courseId]/page";
 import { getChatsByInstructorId } from "@/src/features/instructor-chat/services/chatService";
+import Link from "next/link";
 
 export default async function InstructorDashboard() {
   const user: IUser = await requireUser();
@@ -27,9 +28,12 @@ export default async function InstructorDashboard() {
               <h5 className="text-lg font-bold text-secondary-900">
                 My Courses ({courses.length})
               </h5>
-              <button className="btn btn-sm btn-primary rounded-full!">
+              <Link
+                href="/instructor-courses/create"
+                className="btn btn-sm btn-primary rounded-full!"
+              >
                 + Create Course
-              </button>
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

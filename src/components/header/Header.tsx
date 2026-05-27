@@ -27,7 +27,7 @@ export const Header = () => {
 
   return (
     <header className="bg-white rounded-2xl shadow-sm border border-secondary-50 px-8 py-4 flex items-center justify-between">
-      <Image src="/shiko-logo.svg" alt="Shiko" width={120} height={40} />
+      <Image src="/shiko-logo.svg" alt="Shiko" width={120} height={40} style={{ width: "auto" }} />
       <div className="flex items-center gap-3">
         <div className="text-right">
           <p className="text-small font-bold text-secondary-900">

@@ -123,8 +123,15 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     <section className="bg-white rounded-2xl overflow-hidden shadow-sm border border-secondary-50 flex flex-col">
 
       {/* Banner */}
-      <div className="h-32 overflow-hidden">
-        <Image src="/profile-card-bg.png" alt="Banner" width={400} height={128} className="w-full h-full object-cover object-top" />
+      <div className="h-32 overflow-hidden relative">
+        <Image
+          src="/profile-card-bg.png"
+          alt="Banner"
+          fill
+          sizes="(max-width: 768px) 100vw, 384px"
+          loading="eager"
+          className="object-cover object-top"
+        />
       </div>
 
       <div className="px-6 pb-6">

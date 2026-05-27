@@ -4,15 +4,15 @@ import { IUser } from "../(course)/courses/[courseId]/page";
 import Link from "next/link";
 import { getUserById } from "@/src/features/instructor-chat/services/userService";
 import { getAllCourses } from "@/src/features/courses/services/courseService";
+import { getLiveClassesServer } from "@/src/features/live/services/liveClassService";
 
 export default async function Home() {
   const user: IUser = await requireUser();
   const userInfo = await getUserById(user.id);
   const courses = await getAllCourses();
+  const liveClasses = await getLiveClassesServer();
 
   if (!user) redirect("/login");
-
-  const liveClassesCount = 10;
 
   return (
     <main className="bg-secondary-50 min-h-screen p-4 md:p-8 w-full font-sans">
@@ -75,7 +75,7 @@ export default async function Home() {
               </div>
               <div className="flex items-baseline justify-between mt-4">
                 <span className="text-4xl font-extrabold text-secondary-900 leading-none">
-                  {liveClassesCount}
+                  {liveClasses.length}
                 </span>
                 <span className="text-xs font-semibold text-primary-300 hover:text-primary-500 transition-colors cursor-pointer flex items-center gap-1">
                   View Details →
@@ -110,11 +110,10 @@ export default async function Home() {
                   Role
                 </span>
                 <span
-                  className={`inline-block px-3 py-1 rounded-full text-xs font-bold mt-1 ${
-                    user.role === "Instructor"
+                  className={`inline-block px-3 py-1 rounded-full text-xs font-bold mt-1 ${user.role === "Instructor"
                       ? "bg-primary-50 text-primary-500"
                       : "bg-tertiary-50 text-tertiary-500"
-                  }`}
+                    }`}
                 >
                   {user.role || "Student"}
                 </span>

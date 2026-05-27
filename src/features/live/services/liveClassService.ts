@@ -15,6 +15,12 @@ export interface OnlineUser {
     userImageUrl: string;
 }
 
+export interface LiveClass {
+    id: number;
+    liveClassId: number;
+    createdAt: string;
+}
+
 export const liveClassService = {
     async getMessages(liveClassId: number): Promise<ChatMessage[]> {
         const response = await fetch(
@@ -29,6 +35,21 @@ export const liveClassService = {
 
         if (!response.ok) {
             throw new Error(`Failed to fetch messages: ${response.status}`);
+        }
+
+        return response.json();
+    },
+
+    async getLiveClasses(): Promise<LiveClass[]> {
+        const response = await fetch(`/api/chat/live-classes`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch live classes: ${response.status}`);
         }
 
         return response.json();

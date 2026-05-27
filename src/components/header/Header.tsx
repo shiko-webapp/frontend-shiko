@@ -1,0 +1,52 @@
+"use client";
+import { useEffect, useState } from "react";
+import { ICurrentUser } from "@/src/features/profile/models/ICurrentUser";
+import { IProfile } from "@/src/features/profile/models/IProfile";
+import { getProfile } from "@/src/features/profile/services/profileService";
+import Image from "next/image";
+
+export const Header = () => {
+  const [profile, setProfile] = useState<IProfile | null>(null);
+  const [currentUser, setCurrentUser] = useState<ICurrentUser | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [profileRes, userRes] = await Promise.allSettled([
+          getProfile(),
+          fetch("/api/auth/me").then(res => res.json()),
+        ]);
+        if (profileRes.status === "fulfilled") setProfile(profileRes.value);
+        if (userRes.status === "fulfilled") setCurrentUser(userRes.value);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <header className="bg-white rounded-2xl shadow-sm border border-secondary-50 px-8 py-4 flex items-center justify-between">
+      <Image src="/shiko-logo.svg" alt="Shiko" width={120} height={40} />
+      <div className="flex items-center gap-3">
+        <div className="text-right">
+          <p className="text-small font-bold text-secondary-900">
+            {profile?.firstName} {profile?.lastName}
+          </p>
+          <p className="text-small text-secondary-500">{currentUser?.email}</p>
+        </div>
+        <div className="w-10 h-10 rounded-full bg-secondary-50 overflow-hidden">
+          {profile?.profileImageUrl ? (
+            <img src={profile.profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full bg-secondary-50 flex items-center justify-center">
+              <span className="text-secondary-500 font-bold">
+                {profile?.firstName?.charAt(0)}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+};

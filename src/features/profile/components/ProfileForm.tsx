@@ -4,8 +4,8 @@ import { IProfile } from "../models/IProfile";
 import { updateProfile, IUpdateProfileRequest } from "../services/profileService";
 import { addUserAchievement } from "../services/achievementsService";
 import { IUserAchievement } from "../models/IUserAchievement";
-
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 interface IProfileFormProps {
   profile: IProfile;
@@ -50,6 +50,13 @@ export const ProfileForm = ({ profile, onSave, onAchievementAdded }: IProfileFor
 
   return (
     <section className="bg-white rounded-2xl shadow-sm border border-secondary-50 p-6">
+
+      {/* Profile photo placeholder */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-12 h-12 rounded-xl bg-secondary-50 flex items-center justify-center">
+          <FontAwesomeIcon icon={faUser} className="text-secondary-500 text-xl" />
+        </div>
+      </div>
 
       {/* First name */}
       <div className="mb-4">

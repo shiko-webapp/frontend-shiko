@@ -57,7 +57,7 @@ export const MessageModal = ({
         <p className="text-secondary-500 text-sm mb-6">{message}</p>
         <button
           onClick={onClose}
-          className={`w-full py-2.5 px-4 rounded-xl font-medium text-white transition-colors shadow-sm ${
+          className={`w-full py-2.5 px-4 rounded-xl font-medium text-black transition-colors shadow-sm cursor-pointer ${
             isError
               ? "bg-red-600 hover:bg-red-700"
               : "bg-primary hover:opacity-90"

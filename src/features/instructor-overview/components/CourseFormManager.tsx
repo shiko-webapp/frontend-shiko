@@ -5,10 +5,14 @@ import { CourseForm } from "@/src/features/instructor-courses/components/CourseF
 import { MessageModal } from "@/src/components/modals/MessageModal";
 import { Spinner } from "@/src/features/courses/components/Spinner";
 import { ICreateCourseDto } from "@/src/features/instructor-courses/Dtos/ICreateCourseDto";
+import { IFaqDto } from "@/src/features/instructor-courses/Dtos/IFaqDto";
 import {
   createCourse,
+  deleteCourse,
   updateCourse,
 } from "@/src/features/instructor-courses/services/CourseFormService";
+import { FaqSection } from "../../instructor-courses/components/FaqSection";
+import { createFaqs } from "../../faq/services/faqService";
 
 interface CourseFormManagerProps {
   instructorId: string;
@@ -32,6 +36,8 @@ export default function CourseFormManager({
     userId: instructorId,
   });
 
+  const [faq, setFaq] = useState<IFaqDto[]>([]);
+
   const [modal, setModal] = useState({
     isOpen: false,
     title: "",
@@ -47,8 +53,11 @@ export default function CourseFormManager({
       if (isEditMode) {
         const isUpdated = await updateCourse(initialCourse.id, courseForm);
 
-        if (!isUpdated) {
+        if (!isUpdated && faq.length <= 0) {
           throw new Error("Update failed");
+        }
+        if (faq.length > 0) {
+          await createFaqs(initialCourse.id, faq);
         }
       } else {
         await createCourse(courseForm);
@@ -78,6 +87,10 @@ export default function CourseFormManager({
     setCourseForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handledelete = async () => {
+    await deleteCourse(initialCourse.id);
+  };
+
   return (
     <main className="bg-secondary-50 min-h-screen p-4 md:p-8 w-full relative font-sans">
       {isLoading ? (
@@ -97,20 +110,33 @@ export default function CourseFormManager({
               : "Fill in the details below to publish a new course."}
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-8 mb-8">
             <CourseForm
               courseForm={courseForm}
               onFieldChange={updateCourseField}
             />
-
-            <div className="pt-4 flex justify-end">
-              <button
-                type="submit"
-                className="btn btn-lg btn-primary w-full md:w-auto"
-              >
-                {isEditMode ? "Save Changes" : "Publish Course"}
-              </button>
-            </div>
+            <FaqSection faq={faq} setFaq={setFaq}></FaqSection>
+            <section className={`${isEditMode && "flex justify-between"}`}>
+              {isEditMode && (
+                <div className="pt-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => handledelete}
+                    className="btn btn-lg bg-red-400 w-full md:w-auto"
+                  >
+                    Remove course
+                  </button>
+                </div>
+              )}
+              <div className="pt-4 flex justify-end">
+                <button
+                  type="submit"
+                  className="btn btn-lg btn-primary w-full md:w-auto"
+                >
+                  {isEditMode ? "Save Changes" : "Publish Course"}
+                </button>
+              </div>
+            </section>
           </form>
         </div>
       )}

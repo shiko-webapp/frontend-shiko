@@ -53,12 +53,12 @@ export default function CourseFormManager({
       if (isEditMode) {
         const isUpdated = await updateCourse(initialCourse.id, courseForm);
 
-        if (!isUpdated) {
+        if (!isUpdated && faq.length <= 0) {
           throw new Error("Update failed");
         }
-        // if (faq.length > 0) {
-        //   await createFaqs(initialCourse.id, faq);
-        // }
+        if (faq.length > 0) {
+          await createFaqs(initialCourse.id, faq);
+        }
       } else {
         await createCourse(courseForm);
       }
@@ -115,6 +115,7 @@ export default function CourseFormManager({
               courseForm={courseForm}
               onFieldChange={updateCourseField}
             />
+            <FaqSection faq={faq} setFaq={setFaq}></FaqSection>
             <section className={`${isEditMode && "flex justify-between"}`}>
               {isEditMode && (
                 <div className="pt-4 flex justify-end">
@@ -123,7 +124,7 @@ export default function CourseFormManager({
                     onClick={() => handledelete}
                     className="btn btn-lg bg-red-400 w-full md:w-auto"
                   >
-                    Delete course
+                    Remove course
                   </button>
                 </div>
               )}
@@ -137,7 +138,6 @@ export default function CourseFormManager({
               </div>
             </section>
           </form>
-          {/* <FaqSection faq={faq} setFaq={setFaq}></FaqSection> */}
         </div>
       )}
 

@@ -9,7 +9,6 @@ import { getUserAchievements } from "@/src/features/profile/services/achievement
 import { ProfileCard } from "@/src/features/profile/components/ProfileCard";
 import { ProfileForm } from "@/src/features/profile/components/ProfileForm";
 import { ICurrentUser } from "@/src/features/profile/models/ICurrentUser";
-import { Header } from "@/src/components/header/Header";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<IProfile | null>(null);
@@ -47,12 +46,11 @@ export default function ProfilePage() {
 return (
   
   <main className="min-h-screen p-8">
-    <Header profile={profile} currentUser={currentUser} />
     <h4 className="mb-6">Profile</h4>
-    <div className="flex gap-6 items-start">
+    <div className="flex flex-col lg:flex-row gap-6 items-start">
       {/* Profile Card */}
       {profile && (
-        <div className="w-96 shrink-0">
+        <div className="w-full lg:w-96 shrink-0">
         <ProfileCard
           profile={profile}
           skills={skills}
@@ -65,7 +63,7 @@ return (
         </div>
       )}
       {/* Profile Form */}
-      <div className="flex-1">
+      <div className="flex-1 w-full">
         <ProfileForm
           profile={profile ?? { id: 0, userId: "", firstName: "", lastName: "", phoneNumber: "", description: "", profileImageUrl: "" }}
           onSave={(updatedProfile) => setProfile(updatedProfile)}

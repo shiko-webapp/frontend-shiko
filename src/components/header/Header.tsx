@@ -1,20 +1,33 @@
 "use client";
+import { useEffect, useState } from "react";
 import { ICurrentUser } from "@/src/features/profile/models/ICurrentUser";
 import { IProfile } from "@/src/features/profile/models/IProfile";
+import { getProfile } from "@/src/features/profile/services/profileService";
 import Image from "next/image";
 
-interface IHeaderProps {
-  profile: IProfile | null;
-  currentUser: ICurrentUser | null;
-}
+export const Header = () => {
+  const [profile, setProfile] = useState<IProfile | null>(null);
+  const [currentUser, setCurrentUser] = useState<ICurrentUser | null>(null);
 
-export const Header = ({ profile, currentUser }: IHeaderProps) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [profileRes, userRes] = await Promise.allSettled([
+          getProfile(),
+          fetch("/api/auth/me").then(res => res.json()),
+        ]);
+        if (profileRes.status === "fulfilled") setProfile(profileRes.value);
+        if (userRes.status === "fulfilled") setCurrentUser(userRes.value);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <header className="bg-white rounded-2xl shadow-sm border border-secondary-50 px-8 py-4 flex items-center justify-between">
-      {/* Logo */}
       <Image src="/shiko-logo.svg" alt="Shiko" width={120} height={40} />
-
-      {/* Profile */}
       <div className="flex items-center gap-3">
         <div className="text-right">
           <p className="text-small font-bold text-secondary-900">

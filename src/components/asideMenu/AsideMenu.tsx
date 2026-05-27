@@ -11,7 +11,7 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { DownloadApp } from "./DownloadApp";
+// import { DownloadApp } from "./DownloadApp";
 
 const menuGroups = [
   {
@@ -88,7 +88,7 @@ export const AsideMenu = () => {
           <span className="font-bold text-sm">Log Out</span>
         </button>
 
-        <DownloadApp></DownloadApp>
+        {/* <DownloadApp></DownloadApp> */}
       </div>
     </aside>
   );

@@ -6,11 +6,14 @@ import { requireUser } from "@/src/lib/auth";
 import { IUser } from "../../(course)/courses/[courseId]/page";
 import { getChatsByInstructorId } from "@/src/features/instructor-chat/services/chatService";
 import Link from "next/link";
+import { getPendingEnrollments } from "@/src/features/enrollment/services/enrollmentService";
+import { PendingEnrollments } from "@/src/features/enrollment/components/PendingEnrollments";
 
 export default async function InstructorDashboard() {
   const user: IUser = await requireUser();
   const courses = await getCoursesForInstructor(user.id);
   const activeChats = await getChatsByInstructorId(user.id);
+  const pendingEnrollments = await getPendingEnrollments();
 
   return (
     <main className="bg-secondary-50 min-h-screen p-4 md:p-8 w-full font-sans">
@@ -49,6 +52,9 @@ export default async function InstructorDashboard() {
             instructor={user}
             activeChats={activeChats}
           ></ChatOverview>
+          <PendingEnrollments
+            initialEnrollments={pendingEnrollments}
+          ></PendingEnrollments>
         </div>
       </div>
     </main>

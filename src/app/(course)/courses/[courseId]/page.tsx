@@ -2,6 +2,8 @@ import { CourseInfo } from "@/src/features/courses/components/CourseInfo";
 import { CourseTabs } from "@/src/features/courses/components/CourseTabs";
 import { CourseVideo } from "@/src/features/courses/components/CourseVideo";
 import { getCourseById } from "@/src/features/courses/services/courseService";
+import { EnrollButton } from "@/src/features/enrollment/components/EnrollButton";
+import { checkEnrollmentStatus } from "@/src/features/enrollment/services/enrollmentService";
 import { getAllFaqs } from "@/src/features/faq/services/faqService";
 import { getUserById } from "@/src/features/instructor-chat/services/userService";
 import { requireUser } from "@/src/lib/auth";
@@ -22,10 +24,10 @@ export default async function CourseDetailsPage({
   const faqs = await getAllFaqs(courseId);
 
   const user: IUser = await requireUser();
-  console.log("User: ", user);
   const instructor = await getUserById(course.userId);
 
   const privateChatId = `${course.userId}_${user.id}`;
+  const enrollment = await checkEnrollmentStatus(courseId);
 
   if (!course) {
     return (
@@ -46,6 +48,30 @@ export default async function CourseDetailsPage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <section className="lg:col-span-2">
             <CourseVideo course={course}></CourseVideo>
+            {enrollment.status === "None" && (
+              <EnrollButton courseId={courseId} instructorId={course.userId} />
+            )}
+
+            {enrollment.status === "Pending" && (
+              <div className="w-full bg-amber-50 border border-amber-200 text-amber-800 text-sm font-semibold p-4 rounded-xl text-center mb-6">
+                ⏳ Application Pending. The instructor needs to approve your
+                request before you can access the material.
+              </div>
+            )}
+
+            {enrollment.status === "Rejected" && (
+              <div className="w-full bg-red-50 border border-red-200 text-red-800 text-sm font-semibold p-4 rounded-xl text-center mb-6">
+                ✕ Your application for this course was declined.
+              </div>
+            )}
+
+            {enrollment.status === "Approved" && (
+              <div className="w-full bg-green-50 border border-green-200 text-green-800 text-sm font-semibold p-4 rounded-xl text-center mb-6">
+                ✓ You are enrolled! You have full access to all lectures and
+                chats.
+              </div>
+            )}
+
             <h1 className="text-3xl md:text-4xl font-bold text-[#1D2939] mb-4">
               {course.title}
             </h1>

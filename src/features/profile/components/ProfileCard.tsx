@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { IProfile } from "../models/IProfile";
 import { IUserSkill } from "../models/IUserSkill";
 import { IUserAchievement } from "../models/IUserAchievement";
-import { uploadFile } from "../services/fileHandlerService";
+import { uploadFile, deleteFile } from "../services/fileHandlerService";
 import { updateProfile } from "../services/profileService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faX, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -49,6 +49,11 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     if (!file) return;
 
     try {
+      if (profile.profileImageUrl) {
+        const fileName = profile.profileImageUrl.split("/").pop();
+        if (fileName) await deleteFile(fileName);
+      }
+
       const uploaded = await uploadFile(file);
       const updatedProfile = await updateProfile({
         firstName: profile.firstName,
@@ -118,8 +123,15 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     <section className="bg-white rounded-2xl overflow-hidden shadow-sm border border-secondary-50 flex flex-col">
 
       {/* Banner */}
-      <div className="h-32 overflow-hidden">
-        <Image src="/profile-card-bg.png" alt="Banner" width={400} height={128} className="w-full h-full object-cover object-top" />
+      <div className="h-32 overflow-hidden relative">
+        <Image
+          src="/profile-card-bg.png"
+          alt="Banner"
+          fill
+          sizes="(max-width: 768px) 100vw, 384px"
+          loading="eager"
+          className="object-cover object-top"
+        />
       </div>
 
       <div className="px-6 pb-6">

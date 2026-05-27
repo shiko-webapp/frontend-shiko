@@ -55,3 +55,19 @@ export const liveClassService = {
         return response.json();
     }
 };
+
+export async function getLiveClassesServer(): Promise<LiveClass[]> {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_LIVE_CHAT_API_URL}/api/chat/live-classes`,
+        {
+            headers: { Accept: "application/json" },
+            cache: "no-store",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch live classes: ${response.status}`);
+    }
+
+    return response.json();
+}

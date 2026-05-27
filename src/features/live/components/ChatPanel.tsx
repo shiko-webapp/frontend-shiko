@@ -8,10 +8,11 @@ import { useState } from "react";
 interface ChatPanelProps {
     messages: ChatMessage[];
     userId: string;
+    liveClassId: number;
     onSend: (content: string) => Promise<void>;
 }
 
-export default function ChatPanel({ messages, userId, onSend }: ChatPanelProps) {
+export default function ChatPanel({ messages, userId, liveClassId, onSend }: ChatPanelProps) {
     const [newMessage, setNewMessage] = useState("");
 
     const handleSend = async () => {
@@ -32,7 +33,7 @@ export default function ChatPanel({ messages, userId, onSend }: ChatPanelProps) 
     return (
         <div className="flex flex-col w-sm bg-gray-100 rounded-3xl h-screen">
             <div className="mt-4 p-4">
-                <h5>Live Chat</h5>
+                <h5>Live Chat: {liveClassId}</h5>
             </div>
 
             <div className="flex-1 overflow-y-auto">
@@ -46,7 +47,6 @@ export default function ChatPanel({ messages, userId, onSend }: ChatPanelProps) 
                             className={`flex flex-col p-4 ${isOwn ? "items-end" : "items-start"
                                 }`}
                         >
-                            {/* Header: namn + avatar på samma rad */}
                             <div
                                 className={`flex items-center gap-2 mb-2 ${isOwn ? "flex-row-reverse" : "flex-row"
                                     }`}
@@ -66,7 +66,6 @@ export default function ChatPanel({ messages, userId, onSend }: ChatPanelProps) 
                                 </p>
                             </div>
 
-                            {/* Meddelande */}
                             <div
                                 className={`p-3 rounded-lg ${isOwn ? "bg-red-100" : "bg-gray-200"
                                     }`}
@@ -74,7 +73,6 @@ export default function ChatPanel({ messages, userId, onSend }: ChatPanelProps) 
                                 <p className="text-sm">{msg.content}</p>
                             </div>
 
-                            {/* Tid */}
                             <p className="text-xs text-gray-400 mt-1">
                                 {formatTime(msg.sentAt)}
                             </p>
@@ -84,9 +82,6 @@ export default function ChatPanel({ messages, userId, onSend }: ChatPanelProps) 
             </div>
 
             <div className="flex flex-col item-end p-4 gap-2">
-                {/* <div className="flex flex-col items-end">
-                    <p className="text-sm">Hassan is Typing...</p>
-                </div> */}
                 <div className="relative w-full">
                     <input
                         type="text"

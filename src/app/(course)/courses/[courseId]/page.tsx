@@ -3,6 +3,14 @@ import { CourseTabs } from "@/src/features/courses/components/CourseTabs";
 import { CourseVideo } from "@/src/features/courses/components/CourseVideo";
 import { getCourseById } from "@/src/features/courses/services/courseService";
 import { getAllFaqs } from "@/src/features/faq/services/faqService";
+import { getUserById } from "@/src/features/instructor-chat/services/userService";
+import { requireUser } from "@/src/lib/auth";
+export interface IUser {
+  id: string;
+  email: string;
+  role: "Student" | "Admin" | "Instructor" | string;
+  permissions: string[];
+}
 
 export default async function CourseDetailsPage({
   params,
@@ -13,10 +21,16 @@ export default async function CourseDetailsPage({
   const course = await getCourseById(courseId);
   const faqs = await getAllFaqs(courseId);
 
+  const user: IUser = await requireUser();
+  console.log("User: ", user);
+  const instructor = await getUserById(course.userId);
+
+  const privateChatId = `${course.userId}_${user.id}`;
+
   if (!course) {
     return (
       <div className="p-10 text-center">
-        <h1 className="text-2xl font-bold">Kursen hittades inte</h1>
+        <h1 className="text-2xl font-bold">No active course avalible</h1>
       </div>
     );
   }
@@ -43,6 +57,11 @@ export default async function CourseDetailsPage({
 
             <CourseTabs
               description={course.description}
+              userName={user.email}
+              userId={user.id}
+              chatId={privateChatId}
+              role={user.role}
+              instructor={instructor}
               keyPoints={course.keyPoints}
               faqs={faqs}
             />

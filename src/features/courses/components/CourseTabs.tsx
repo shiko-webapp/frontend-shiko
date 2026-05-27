@@ -3,43 +3,61 @@
 import { useState } from "react";
 import { IFaq } from "../../faq/models/IFaq";
 import { FaqCard } from "../../faq/components/FaqCard";
+import { InstructorCard } from "../../instructor-chat/components/InstructorCard";
+import { IProfile } from "../../profile/models/IProfile";
 
 interface CourseTabsProps {
   description: string | null;
   keyPoints: string[];
   faqs: IFaq[];
+  instructor: IProfile;
+
+  userName: string;
+  userId: string;
+  chatId: string;
+  role: string;
 }
 
-export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
-  const [activeTab, setActiveTab] = useState<"overview" | "faqs">("overview");
+type TabType = "overview" | "faqs" | "instructor";
+
+const menuCategories = [
+  { title: "Overview" },
+  { title: "FAQs" },
+  { title: "Instructor" },
+];
+
+export function CourseTabs({
+  description,
+  keyPoints,
+  faqs,
+  userName,
+  userId,
+  chatId,
+  role,
+  instructor,
+}: CourseTabsProps) {
+  const [activeTab, setActiveTab] = useState<string>("Overview");
 
   return (
     <section className="mt-8">
       <div className="flex gap-2 mb-8">
-        <button
-          onClick={() => setActiveTab("overview")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
-            activeTab === "overview"
-              ? "bg-[#1E293B] text-white"
-              : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
-          }`}
-        >
-          Overview
-        </button>
-        <button
-          onClick={() => setActiveTab("faqs")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
-            activeTab === "faqs"
-              ? "bg-[#1E293B] text-white"
-              : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
-          }`}
-        >
-          FAQs
-        </button>
+        {menuCategories.map((c) => (
+          <button
+            key={c.title}
+            onClick={() => setActiveTab(c.title)}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-all cursor-pointer ${
+              activeTab === c.title
+                ? "bg-[#1E293B] text-white"
+                : "bg-[#F1F5F9] text-[#94A3B8] hover:text-[#1E293B]"
+            }`}
+          >
+            {c.title}
+          </button>
+        ))}
       </div>
 
       <div className="mt-6">
-        {activeTab === "overview" && (
+        {activeTab === "Overview" && (
           <div className="space-y-8">
             <div>
               <h2 className="text-xl font-bold text-[#0F172A] mb-3">About</h2>
@@ -70,7 +88,24 @@ export function CourseTabs({ description, keyPoints, faqs }: CourseTabsProps) {
             )}
           </div>
         )}
-        {activeTab === "faqs" && <FaqCard faqs={faqs}></FaqCard>}
+        {activeTab === "FAQs" && <FaqCard faqs={faqs}></FaqCard>}
+
+        {role != "Instructor" && activeTab === "Instructor" && (
+          <InstructorCard
+            userName={userName}
+            userId={userId}
+            chatId={chatId}
+            instructor={instructor}
+          />
+        )}
+        {/* {activeTab === "Instructor" && (
+          <InstructorCard
+            userName={userName}
+            userId={userId}
+            chatId={chatId}
+            instructor={instructor}
+          />
+        )} */}
       </div>
     </section>
   );

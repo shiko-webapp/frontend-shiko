@@ -11,3 +11,13 @@ export const uploadFile = async (file: File): Promise<IFileUpload> => {
     });
     return res.json();
 }
+
+export const deleteFile = async (fileName: string): Promise<void> => {
+  await apiFetch(`/api/profile/filehandler`, {
+    method: "DELETE",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ fileName }),
+  });
+};

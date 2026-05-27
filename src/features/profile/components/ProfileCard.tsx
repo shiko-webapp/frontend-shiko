@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { IProfile } from "../models/IProfile";
 import { IUserSkill } from "../models/IUserSkill";
 import { IUserAchievement } from "../models/IUserAchievement";
-import { uploadFile } from "../services/fileHandlerService";
+import { uploadFile, deleteFile } from "../services/fileHandlerService";
 import { updateProfile } from "../services/profileService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faX, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +15,7 @@ import { createSkill, deleteSkill } from "../services/adminSkillsService";
 import { addUserAchievement } from "../services/achievementsService";
 import { faTrophy, faBolt, faRightToBracket, faUser, faImage, faStar } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 const achievementIcons: Record<string, IconDefinition> = {
   "Course Completed": faTrophy,
@@ -48,6 +49,11 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     if (!file) return;
 
     try {
+      if (profile.profileImageUrl) {
+        const fileName = profile.profileImageUrl.split("/").pop();
+        if (fileName) await deleteFile(fileName);
+      }
+
       const uploaded = await uploadFile(file);
       const updatedProfile = await updateProfile({
         firstName: profile.firstName,
@@ -117,7 +123,16 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     <section className="bg-white rounded-2xl overflow-hidden shadow-sm border border-secondary-50 flex flex-col">
 
       {/* Banner */}
-      <div className="h-32 bg-gradient-to-r from-purple-900 to-pink-600" />
+      <div className="h-32 overflow-hidden relative">
+        <Image
+          src="/profile-card-bg.png"
+          alt="Banner"
+          fill
+          sizes="(max-width: 768px) 100vw, 384px"
+          loading="eager"
+          className="object-cover object-top"
+        />
+      </div>
 
       <div className="px-6 pb-6">
         {/* Profile image */}
@@ -127,7 +142,9 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
               {profile.profileImageUrl ? (
                 <img src={profile.profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-secondary-50" />
+                <div className="w-full h-full bg-secondary-50 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faUser} className="text-secondary-500 text-2xl" />
+                </div>
               )}
             </div>
             {/* Edit icon */}

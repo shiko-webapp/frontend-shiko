@@ -6,6 +6,8 @@ import "./globals.css";
 import { AsideMenu } from "../components/asideMenu/AsideMenu";
 import { AuthProvider } from "../context/AuthContext";
 import { usePathname } from "next/navigation";
+import { Header } from "@/src/components/header/Header";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -43,17 +45,20 @@ export default function RootLayout({
   const hideNavbar = hiddenRoutes.includes(pathname);
   return (
     <html lang="en" className={`${archivo.variable} h-full antialiased`}>
-      <body className="h-screen flex overflow-hidden">
-        {!hideNavbar && (
-          <div className="p-4 flex h-full">
-            <AsideMenu />
-          </div>
-        )}
-        <main className="flex-1 overflow-y-auto p-4 pl-0">
-          <div className="h-full w-full">
-            <AuthProvider>{children}</AuthProvider>
-          </div>
-        </main>
+      <body style={{ backgroundColor: '#F7F8F9' }} className="h-screen flex flex-col overflow-hidden">
+        {!hideNavbar && <div className="p-4"><Header /></div>}
+        <div className="flex flex-1 overflow-hidden">
+          {!hideNavbar && (
+            <div className="p-4 flex h-full">
+              <AsideMenu />
+            </div>
+          )}
+          <main className="flex-1 overflow-y-auto p-4 pl-0">
+            <div className="h-full w-full">
+              <AuthProvider>{children}</AuthProvider>
+            </div>
+          </main>
+        </div>
       </body>
     </html>
   );

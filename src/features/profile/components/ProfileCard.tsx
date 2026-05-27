@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { IProfile } from "../models/IProfile";
 import { IUserSkill } from "../models/IUserSkill";
 import { IUserAchievement } from "../models/IUserAchievement";
-import { uploadFile } from "../services/fileHandlerService";
+import { uploadFile, deleteFile } from "../services/fileHandlerService";
 import { updateProfile } from "../services/profileService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faX, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -49,6 +49,11 @@ export const ProfileCard = ({ profile, skills, achievements, role, onProfileUpda
     if (!file) return;
 
     try {
+      if (profile.profileImageUrl) {
+        const fileName = profile.profileImageUrl.split("/").pop();
+        if (fileName) await deleteFile(fileName);
+      }
+
       const uploaded = await uploadFile(file);
       const updatedProfile = await updateProfile({
         firstName: profile.firstName,

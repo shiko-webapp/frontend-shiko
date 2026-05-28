@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 
 import AuthLayout from "../../components/(auth)/AuthLayout";
 import EmailForm from "./components/EmailForm";
@@ -23,9 +23,9 @@ export default function LoginPage() {
 
     try {
       const response = beginLoginFlow(email,router)
-
+      
       console.log(response);
-
+     
       //window.location.href = "/";
     } catch (err) {
       console.error("Login failed", err);

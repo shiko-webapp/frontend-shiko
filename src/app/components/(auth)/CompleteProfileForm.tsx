@@ -48,7 +48,7 @@ export default function CompleteProfileForm() {
       <h1 className="text-[38px] font-bold text-gray-900 tracking-tight leading-tight mb-2">
         Almost There
       </h1>
-      <p className="text-sm text-gray-500 mb-8 max-w-[340px]">
+      <p className="text-sm text-gray-500 mb-8 max-w-85">
         Before you can sign in you need to verify your profile information and
         set a strong password. For security reasons, your password must be at
         least 8 characters long and include uppercase and lowercase letters,
@@ -98,7 +98,7 @@ export default function CompleteProfileForm() {
             height="16"
             viewBox="0 0 16 16"
             fill="none"
-            className="flex-shrink-0"
+            className="shrink-0"
           >
             <rect
               x="3"
@@ -182,7 +182,7 @@ export default function CompleteProfileForm() {
             height="16"
             viewBox="0 0 16 16"
             fill="none"
-            className="flex-shrink-0"
+            className="shrink-0"
           >
             <rect
               x="3"

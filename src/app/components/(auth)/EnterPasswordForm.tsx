@@ -52,7 +52,7 @@ export default function EnterPasswordForm() {
             height="16"
             viewBox="0 0 16 16"
             fill="none"
-            className="flex-shrink-0"
+            className="shrink-0"
           >
             <circle cx="8" cy="6" r="3" stroke="#9CA3AF" strokeWidth="1.5" />
             <path
@@ -83,7 +83,7 @@ export default function EnterPasswordForm() {
             height="16"
             viewBox="0 0 16 16"
             fill="none"
-            className="flex-shrink-0"
+            className="shrink-0"
           >
             <rect
               x="3"
@@ -112,7 +112,7 @@ export default function EnterPasswordForm() {
           />
           <button
             onClick={() => setShowPassword(!showPassword)}
-            className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+            className="text-gray-400 hover:text-gray-600 transition-colors shrink-0"
           >
             {showPassword ? (
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

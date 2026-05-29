@@ -20,7 +20,9 @@
 ### Microservices
 - Auth API: [name]
 - Course API: [name]
-- Chat API: [name]
+- LiveClass Chat API: Felicia
+- NewsletterService: Felicia
+- Popular courses API: Felicia
 - Skills API: Samuel
 - Achievements API: Samuel
 - Profile API: Samuel
@@ -30,7 +32,8 @@
 - Each team member is responsible for the frontend of their own modules
 - Auth pages: [name]
 - Course pages: [name]
-- Chat/LiveClass pages: [name]
+- Chat/LiveClass pages: Felicia
+- Popular courses: Felicia
 - Profile: Samuel
 - Shared components and layout: shared responsibility
 

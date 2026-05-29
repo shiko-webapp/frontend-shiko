@@ -28,3 +28,18 @@ export const getCourseById = async (id: string): Promise<ICourse> => {
     throw error;
   }
 };
+
+export const getCoursesForInstructor = async (
+  id: string
+): Promise<ICourse[]> => {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_COURSE_API_URL;
+    const course = await getData<ICourse[]>(`${baseUrl}/instructor/${id}`);
+
+    return course;
+  } catch (error) {
+    console.log(error);
+
+    throw error;
+  }
+};

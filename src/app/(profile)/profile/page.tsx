@@ -44,12 +44,13 @@ export default function ProfilePage() {
   if (isLoading) return <p>Loading...</p>;
 
 return (
+  
   <main className="min-h-screen p-8">
     <h4 className="mb-6">Profile</h4>
-    <div className="flex gap-6 items-start">
+    <div className="flex flex-col lg:flex-row gap-6 items-start">
       {/* Profile Card */}
       {profile && (
-        <div className="w-96 shrink-0">
+        <div className="w-full lg:w-96 shrink-0">
         <ProfileCard
           profile={profile}
           skills={skills}
@@ -57,14 +58,16 @@ return (
           role={currentUser?.role ?? "Student"}
           onProfileUpdate={(updatedProfile) => setProfile(updatedProfile)}
           onSkillsUpdate={(updatedSkills) => setSkills(updatedSkills)}
+          onAchievementAdded={(achievement) => setAchievements([...achievements, achievement])}
         />
         </div>
       )}
       {/* Profile Form */}
-      <div className="flex-1">
+      <div className="flex-1 w-full">
         <ProfileForm
           profile={profile ?? { id: 0, userId: "", firstName: "", lastName: "", phoneNumber: "", description: "", profileImageUrl: "" }}
           onSave={(updatedProfile) => setProfile(updatedProfile)}
+          onAchievementAdded={(achievement) => setAchievements([...achievements, achievement])}
         />
       </div>
     </div>

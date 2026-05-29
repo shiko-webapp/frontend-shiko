@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DescriptionSection } from "./DescriptionSection";
 import { ICreateCourseDto } from "../Dtos/ICreateCourseDto";
 import { KeyPointsSection } from "./KeyPointsSection";
+import { uploadFile } from "../../profile/services/fileHandlerService";
 
 interface ICourseFormProps {
   courseForm: ICreateCourseDto;
@@ -10,19 +11,35 @@ interface ICourseFormProps {
 
 export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setSelectedFile(file);
-      onFieldChange("imageUrl", `/images/${file.name}`);
+      setIsUploading(true);
+
+      try {
+        const response = await uploadFile(file);
+
+        onFieldChange("imageUrl", response.fileUrl);
+
+        console.log(
+          "Image successfully stored in Azure Blob Storage:",
+          response
+        );
+      } catch (error) {
+        console.error("File upload crashed:", error);
+        alert("Kunde inte ladda upp bilden till lagringsserver, försök igen.");
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
   return (
     <section className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Course Title */}
         <div className="flex flex-col gap-2 lg:col-span-2">
           <label className="text-small font-semibold text-secondary-900">
             Course Title
@@ -37,7 +54,6 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
           />
         </div>
 
-        {/* Image File Selector Button */}
         <div className="flex flex-col gap-2">
           <label className="text-small font-semibold text-secondary-900">
             Course Image
@@ -49,19 +65,25 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
               onChange={handleFileChange}
               className="hidden"
               id="course-image-upload"
+              disabled={isUploading}
             />
             <label
               htmlFor="course-image-upload"
-              className="btn btn-md btn-secondary w-full cursor-pointer flex items-center justify-center gap-2"
+              className={`btn btn-md btn-secondary w-full cursor-pointer flex items-center justify-center gap-2 ${
+                isUploading ? "opacity-50 pointer-events-none" : ""
+              }`}
             >
-              📁 {selectedFile ? selectedFile.name : "Choose Image File"}
+              {isUploading
+                ? "⏳ Uploading Image..."
+                : selectedFile
+                ? `📁 ${selectedFile.name}`
+                : "Choose Image File"}
             </label>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Number of Lessons */}
         <div className="flex flex-col gap-2">
           <label className="text-small font-semibold text-secondary-900">
             Number of Lessons
@@ -77,7 +99,6 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
           />
         </div>
 
-        {/* Duration (Minutes) */}
         <div className="flex flex-col gap-2">
           <label className="text-small font-semibold text-secondary-900">
             Duration (Minutes)
@@ -94,15 +115,11 @@ export const CourseForm = ({ courseForm, onFieldChange }: ICourseFormProps) => {
         </div>
       </div>
 
-      {/* Skicka vidare propsen till din DescriptionSection om den också behöver uppdatera statet */}
       <DescriptionSection
         courseForm={courseForm}
         onFieldChange={onFieldChange}
       />
-      <KeyPointsSection
-        courseForm={courseForm}
-        onFieldChange={onFieldChange}
-      ></KeyPointsSection>
+      <KeyPointsSection courseForm={courseForm} onFieldChange={onFieldChange} />
     </section>
   );
 };

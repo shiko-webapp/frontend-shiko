@@ -88,7 +88,7 @@ export const AsideMenu = () => {
           <span className="font-bold text-sm">Log Out</span>
         </button>
 
-        <DownloadApp></DownloadApp>
+        {/* <DownloadApp></DownloadApp> */}
       </div>
     </aside>
   );

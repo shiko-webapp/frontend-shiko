@@ -17,32 +17,37 @@ export default function LiveClassChat({ liveClassId, userId }: liveClassProps) {
     const hubRef = useRef<ChatHub | null>(null);
 
     useEffect(() => {
-        liveClassService.getMessages(liveClassId)
-            .then(setMessages)
-            .catch(error => console.error("Failed to load messages:", error));
-
         const hub = new ChatHub();
         hubRef.current = hub;
+        let cancelled = false;
 
-        const connect = async () => {
-            await hub.start();
+        liveClassService.getMessages(liveClassId)
+            .then((msgs) => { if (!cancelled) setMessages(msgs); })
+            .catch(error => console.error("Failed to load messages:", error));
 
-            hub.onReceiveMessage((msg) => {
-                setMessages((prev) => [...prev, msg]);
-            });
+        const connectPromise = (async () => {
+            try {
+                await hub.start();
+                if (cancelled) return;
 
-            hub.onPresenceUpdated((users) => {
-                setOnlineUsers(users);
-            });
+                hub.onReceiveMessage((msg) => {
+                    setMessages((prev) => [...prev, msg]);
+                });
 
-            await hub.joinLiveClass(liveClassId);
-        };
+                hub.onPresenceUpdated((users) => {
+                    setOnlineUsers(users);
+                });
 
-        connect();
+                await hub.joinLiveClass(liveClassId);
+            } catch {
+            }
+        })();
 
         return () => {
-            hub.leaveLiveClass(liveClassId);
-            hub.stop();
+            cancelled = true;
+            connectPromise.finally(() => {
+                hub.stop().catch(() => { });
+            });
         };
     }, [liveClassId]);
 
@@ -58,6 +63,7 @@ export default function LiveClassChat({ liveClassId, userId }: liveClassProps) {
                     messages={messages}
                     userId={userId}
                     onSend={handleSend}
+                    liveClassId={liveClassId}
                 />
             </div>
         </main>

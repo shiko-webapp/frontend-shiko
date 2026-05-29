@@ -7,6 +7,7 @@ export async function apiFetch(
     credentials: "include",
   });
 
+  
   // access token expired/missing
   if (res.status === 401) {
     console.log("Attempting refresh...");

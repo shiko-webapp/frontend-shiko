@@ -1,4 +1,4 @@
-import { requireUser } from "@/src/lib/auth";
+import { requireUser } from "@/src/lib/auth/auth";
 import { redirect } from "next/navigation";
 import { IUser } from "../(course)/courses/[courseId]/page";
 import Link from "next/link";
